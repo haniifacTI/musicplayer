@@ -125,10 +125,10 @@ Partial Class mainForm
         Me.btnStop.FlatAppearance.BorderSize = 0
         Me.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnStop.Image = CType(resources.GetObject("btnStop.Image"), System.Drawing.Image)
-        Me.btnStop.Location = New System.Drawing.Point(229, 131)
+        Me.btnStop.Location = New System.Drawing.Point(224, 124)
         Me.btnStop.Margin = New System.Windows.Forms.Padding(4)
         Me.btnStop.Name = "btnStop"
-        Me.btnStop.Size = New System.Drawing.Size(39, 33)
+        Me.btnStop.Size = New System.Drawing.Size(49, 48)
         Me.btnStop.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.btnStop, "Stop")
         Me.btnStop.UseVisualStyleBackColor = True

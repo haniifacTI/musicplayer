@@ -9,8 +9,8 @@ Public Class mainForm
     Dim shuffle As Boolean = False
     Dim repeatOne As Boolean = False
     Dim repeatPlaylist As Boolean = False
-    Dim IndexLagu As Integer = 1 ' untuk timer1
     Dim isStop As Boolean
+    Dim isEnded As Boolean = False
 
     Dim playlistOri As New List(Of String)
     Dim lstShuffle As New List(Of String)
@@ -71,12 +71,12 @@ Public Class mainForm
             btnStop.Enabled = True
             btnNext.Enabled = True
             btnPrev.Enabled = True
-            btnRepeatPlaylist.Enabled = True
-            btnRepeatSong.Enabled = True
-            btnShuffle.Enabled = True
-            btnLirik.Enabled = True
             TrackBar1.Enabled = True
             tbVolume.Enabled = True
+            'btnLirik.Enabled = True
+            'btnRepeatPlaylist.Enabled = True
+            'btnRepeatSong.Enabled = True
+            'btnShuffle.Enabled = True
         End If
     End Sub
 
@@ -218,7 +218,7 @@ Public Class mainForm
 
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
         'Menandakan play
-        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused Then
+        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And isStop = False Then
             If playlistOri.Count <> 0 Then
                 ''shuffle
                 'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
@@ -260,27 +260,32 @@ Public Class mainForm
                 'tampilin judul
                 tampilJudul()
             Else
-                MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
+                MsgBox("Please add the playlist first.",, "Play")
             End If
 
-
-            'Menandakan Pause
-        ElseIf btnPlay.Text = "play" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused Then
+        ElseIf isEnded Then ' kalau playlist end tapi orgnya mau ngeplay
+            AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
             AxWindowsMediaPlayer1.Ctlcontrols.play()
             TimerJudul.Enabled = True
-        ElseIf btnPlay.Text = "pause" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Then
+            Timer1.Enabled = True
+            isStop = False
+            isEnded = False
+            MessageBox.Show("Play Button Pressed : End Play", "DEBUG btnPlay_Click()") ' DEBUG
+        ElseIf (btnPlay.Text = "play" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused) Or isStop Then 'buat ngeplay setelah di pause 
+            btnPlay.Image = Image.FromFile("Images/pause.png")
+            btnPlay.Text = "pause"
+            AxWindowsMediaPlayer1.Ctlcontrols.play()
+            TimerJudul.Enabled = True
+            Timer1.Enabled = True
+            isStop = False
+            MessageBox.Show("Play Button Stop/Pause to Play", "DEBUG btnPlay_Click()") 'DEBUG
+        ElseIf btnPlay.Text = "pause" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Then 'buat pause
             btnPlay.Image = Image.FromFile("Images/play.png")
             btnPlay.Text = "play"
             AxWindowsMediaPlayer1.Ctlcontrols.pause()
             TimerJudul.Enabled = False
-        ElseIf AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
-            btnPlay.Image = Image.FromFile("Images/pause.png")
-            btnPlay.Text = "pause"
-            AxWindowsMediaPlayer1.Ctlcontrols.play()
-            TimerJudul.Enabled = True
-            isStop = False
         End If
     End Sub
 
@@ -347,6 +352,8 @@ Public Class mainForm
             End Try
 
             Timer1.Enabled = True
+            isStop = False
+            isEnded = False
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
 
@@ -412,6 +419,8 @@ Public Class mainForm
             End Try
 
             Timer1.Enabled = True
+            isStop = False
+            isEnded = False
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
 
@@ -431,35 +440,31 @@ Public Class mainForm
         End If
     End Sub
 
-    Private Sub NormalPlaySong() 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
+    Private Sub NormalPlaySong(sender As Object, e As EventArgs) 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
 
         If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
         AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
             If playlistOri.Count > 0 And isStop = False Then
                 Try
-                    AxWindowsMediaPlayer1.URL = (playlistOri(indexLaguSkrg + 1))
-                    'IndexLagu += 1
+                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
                     tampilJudul()
                 Catch outRange As System.ArgumentOutOfRangeException
-                    AxWindowsMediaPlayer1.URL = (playlistOri(indexLaguSkrg))
+                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg)
+                    btnStop_Click(sender, e)
                     lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
                     lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
 
                     TimerJudul.Enabled = False
                     Timer1.Enabled = False
                     btnPlay.Text = "play"
-                    btnPlay.Image = Image.FromFile("Images/play.png")
+                    btnPlay.Image = Image.FromFile("images/play.png")
 
-                    IndexLagu -= 1
-
-                    MessageBox.Show("End of Playlist")
+                    MessageBox.Show("End of Playlist", "DEBUG NormalPlaySong()")
+                    isEnded = True
                 End Try
-
-            ElseIf isStop = True Then
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
-                isStop = False
             End If
+
         End If
     End Sub
 
@@ -478,7 +483,7 @@ Public Class mainForm
 
         DurationAndSeekBarSetter() 'set seekbar & duration
 
-        NormalPlaySong() 'normal play
+        NormalPlaySong(sender, e) 'normal play
 
         'If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsTransitioning And AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
         '    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
@@ -537,12 +542,12 @@ Public Class mainForm
         btnStop.Enabled = False
         btnNext.Enabled = False
         btnPrev.Enabled = False
+        TrackBar1.Enabled = False
+        tbVolume.Enabled = False
         btnRepeatPlaylist.Enabled = False
         btnRepeatSong.Enabled = False
         btnShuffle.Enabled = False
         btnLirik.Enabled = False
-        TrackBar1.Enabled = False
-        tbVolume.Enabled = False
     End Sub
 
     ' settingan buat volume
