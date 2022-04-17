@@ -36,6 +36,7 @@ Partial Class mainForm
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DownloadMusicToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MusicTagEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lvPlaylist = New System.Windows.Forms.ListView()
@@ -159,7 +160,7 @@ Partial Class mainForm
         '
         Me.SettingToolStripMenuItem.Name = "SettingToolStripMenuItem"
         Me.SettingToolStripMenuItem.Size = New System.Drawing.Size(170, 26)
-        Me.SettingToolStripMenuItem.Text = "Setting"
+        Me.SettingToolStripMenuItem.Text = "Settings"
         '
         'ExitToolStripMenuItem
         '
@@ -169,7 +170,7 @@ Partial Class mainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DownloadMusicToolStripMenuItem1})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DownloadMusicToolStripMenuItem1, Me.MusicTagEditorToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(58, 24)
         Me.ToolsToolStripMenuItem.Text = "Tools"
@@ -177,8 +178,14 @@ Partial Class mainForm
         'DownloadMusicToolStripMenuItem1
         '
         Me.DownloadMusicToolStripMenuItem1.Name = "DownloadMusicToolStripMenuItem1"
-        Me.DownloadMusicToolStripMenuItem1.Size = New System.Drawing.Size(203, 26)
-        Me.DownloadMusicToolStripMenuItem1.Text = "Download Music"
+        Me.DownloadMusicToolStripMenuItem1.Size = New System.Drawing.Size(216, 26)
+        Me.DownloadMusicToolStripMenuItem1.Text = "Music Downloader"
+        '
+        'MusicTagEditorToolStripMenuItem
+        '
+        Me.MusicTagEditorToolStripMenuItem.Name = "MusicTagEditorToolStripMenuItem"
+        Me.MusicTagEditorToolStripMenuItem.Size = New System.Drawing.Size(216, 26)
+        Me.MusicTagEditorToolStripMenuItem.Text = "Music Tag Editor"
         '
         'HelpToolStripMenuItem
         '
@@ -425,4 +432,5 @@ Partial Class mainForm
     Friend WithEvents SettingToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents tbSong As ProgressBar
+    Friend WithEvents MusicTagEditorToolStripMenuItem As ToolStripMenuItem
 End Class

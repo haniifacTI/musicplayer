@@ -4,16 +4,17 @@ Imports Id3
 Public Class mainForm
     Dim frmLirik As New frmLirik
     Dim playlistPath As String
+    Dim startpath As String = Application.StartupPath
+
     Dim shuffle As Boolean = False
     Dim repeatOne As Boolean = False
     Dim repeatPlaylist As Boolean = False
+    Dim IndexLagu As Integer = 1 ' untuk timer1
+    Dim isStop As Boolean
 
     Dim playlistOri As New List(Of String)
     Dim lstShuffle As New List(Of String)
     Dim queueShuffle As New List(Of String)
-    Dim Index As Integer = 1 ' untuk timer1
-
-    Dim startpath As String = Application.StartupPath
 
     Private Sub getFiles()
         lvPlaylist.Items.Clear()
@@ -77,6 +78,28 @@ Public Class mainForm
             TrackBar1.Enabled = True
             tbVolume.Enabled = True
         End If
+    End Sub
+
+    Private Sub tampilJudul()
+        'Menampilkan judul dan artis
+        Dim file As Mp3 = New Mp3(AxWindowsMediaPlayer1.URL, Mp3Permissions.Read)
+        Dim tag As Id3Tag = New Id3Tag()
+        If file.HasTags Then
+            If file.HasTagOfVersion(Id3Version.V1X) Then
+                tag = file.GetTag(Id3TagFamily.Version1X)
+            ElseIf file.HasTagOfVersion(Id3Version.V23) Then
+                tag = file.GetTag(Id3TagFamily.Version2X)
+            End If
+            lblJudul.Text = tag.Title
+            lblArtis.Text = tag.Artists
+        Else
+            lblJudul.Text = AxWindowsMediaPlayer1.currentMedia.name 'AxWindowsMediaPlayer1.URL.Split("\")(AxWindowsMediaPlayer1.URL.Split("\").Count - 1)
+            lblArtis.Text = "Unknown Artist"
+        End If
+        lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
+        lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+
+        TimerJudul.Enabled = True
     End Sub
 
     'Private Sub AxWindowsMediaPlayer1_CurrentItemChange(sender As Object, e As AxWMPLib._WMPOCXEvents_CurrentItemChangeEvent) Handles AxWindowsMediaPlayer1.CurrentItemChange
@@ -185,6 +208,12 @@ Public Class mainForm
         tbSong.Value = 0
         TrackBar1.Value = 0
         Timer1.Enabled = False
+        TimerJudul.Enabled = False
+        isStop = True
+
+        ' biar stop judulnya ditengah
+        lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
+        lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
     End Sub
 
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
@@ -220,32 +249,19 @@ Public Class mainForm
                 '    End If
                 'End If
 
-                'If AxWindowsMediaPlayer1.currentMedia Is Nothing Then
-                '    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-                'End If
-
-                'If AxWindowsMediaPlayer1.currentMedia Is Nothing Then
-                '    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-                'End If
                 Timer1.Enabled = True
                 btnPlay.Image = Image.FromFile("Images/pause.png")
                 btnPlay.Text = "pause"
 
-                'tampilin judul
                 If AxWindowsMediaPlayer1.currentMedia Is Nothing Then
                     AxWindowsMediaPlayer1.URL = playlistOri(0)
                 End If
 
+                'tampilin judul
                 tampilJudul()
-
             Else
-                    MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
+                MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
             End If
-
-            'runningtext
-            TimerJudul.Enabled = True
 
 
             'Menandakan Pause
@@ -253,104 +269,89 @@ Public Class mainForm
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
             AxWindowsMediaPlayer1.Ctlcontrols.play()
-            'Timer1.Enabled = True
-        Else
+            TimerJudul.Enabled = True
+        ElseIf btnPlay.Text = "pause" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Then
             btnPlay.Image = Image.FromFile("Images/play.png")
             btnPlay.Text = "play"
             AxWindowsMediaPlayer1.Ctlcontrols.pause()
-            'Timer1.Enabled = False
+            TimerJudul.Enabled = False
+        ElseIf AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
+            btnPlay.Image = Image.FromFile("Images/pause.png")
+            btnPlay.Text = "pause"
+            AxWindowsMediaPlayer1.Ctlcontrols.play()
+            TimerJudul.Enabled = True
+            isStop = False
         End If
     End Sub
 
-    Private Sub tampilJudul()
-        'Menampilkan judul dan artis
-        Dim file As Mp3 = New Mp3(AxWindowsMediaPlayer1.URL, Mp3Permissions.Read)
-        Dim tag As Id3Tag = New Id3Tag()
-        If file.HasTags Then
-            If file.HasTagOfVersion(Id3Version.V1X) Then
-                tag = file.GetTag(Id3TagFamily.Version1X)
-            ElseIf file.HasTagOfVersion(Id3Version.V23) Then
-                tag = file.GetTag(Id3TagFamily.Version2X)
-            End If
-            lblJudul.Text = tag.Title
-            lblArtis.Text = tag.Artists
+    Private Sub btnLirik_Click(sender As Object, e As EventArgs) Handles btnLirik.Click
+        If AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
+            frmLirik.ShowDialog()
         Else
-            lblJudul.Text = AxWindowsMediaPlayer1.URL.Split("\")(AxWindowsMediaPlayer1.URL.Split("\").Count - 1)
-            lblArtis.Text = "Unknown Artist"
+            MessageBox.Show("Please play a song first before opening lyric", "Error Message")
         End If
-        lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
-        lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
     End Sub
 
     Private Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
-        Index -= 1
+
         If playlistOri.Count <> 0 Then
-            'Shuffle
-            If shuffle = True And repeatOne = False And repeatPlaylist = False Then
-                Dim indexShuffle As Integer = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
-                Try
-                    AxWindowsMediaPlayer1.URL = queueShuffle(indexShuffle - 1)
-                    lstShuffle.Add(queueShuffle(indexShuffle - 1))
-                    queueShuffle.Remove(queueShuffle(indexShuffle - 1))
-                Catch
-                    AxWindowsMediaPlayer1.URL = queueShuffle(queueShuffle.Count - 1)
-                    lstShuffle.Add(queueShuffle(queueShuffle.Count - 1))
-                    queueShuffle.Remove(queueShuffle(queueShuffle.Count - 1))
-                End Try
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
+            ''Shuffle
+            'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
+            '    Dim indexShuffle As Integer = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = queueShuffle(indexShuffle - 1)
+            '        lstShuffle.Add(queueShuffle(indexShuffle - 1))
+            '        queueShuffle.Remove(queueShuffle(indexShuffle - 1))
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = queueShuffle(queueShuffle.Count - 1)
+            '        lstShuffle.Add(queueShuffle(queueShuffle.Count - 1))
+            '        queueShuffle.Remove(queueShuffle(queueShuffle.Count - 1))
+            '    End Try
+            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
 
-                'Repeat one song
-            ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
+            '    'Repeat one song
+            'ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
+            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
 
-                'Repeat one playlist
-            ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
-                Try
-                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
-                Catch
-                    AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
-                End Try
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
+            '    'Repeat one playlist
+            'ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
+            '    End Try
+            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
 
-                'Play sesuai pilihan
-            ElseIf lvPlaylist.SelectedItems.Count = 1 Then
-                Try
-                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
-                Catch
-                    AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
-                End Try
+            '    'Play sesuai pilihan
+            'ElseIf lvPlaylist.SelectedItems.Count = 1 Then
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
+            '    End Try
 
-                'Play normal
-            Else
-                Try
-                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
-                Catch
-                    AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
-                End Try
-            End If
+            '    'Play normal
+            'Else
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
+            '    End Try
+            'End If
+
+            Try
+                AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
+            Catch
+                AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
+            End Try
+
             Timer1.Enabled = True
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
 
             'Menampilkan judul dan artis
-            Dim file As Mp3 = New Mp3(AxWindowsMediaPlayer1.URL, Mp3Permissions.Read)
-            Dim tag As Id3Tag = New Id3Tag()
-            If file.HasTags Then
-                If file.HasTagOfVersion(Id3Version.V1X) Then
-                    tag = file.GetTag(Id3TagFamily.Version1X)
-                ElseIf file.HasTagOfVersion(Id3Version.V23) Then
-                    tag = file.GetTag(Id3TagFamily.Version2X)
-                End If
-                lblJudul.Text = tag.Title
-                lblArtis.Text = tag.Artists
-            Else
-                lblJudul.Text = AxWindowsMediaPlayer1.URL.Split("\")(AxWindowsMediaPlayer1.URL.Split("\").Count - 1)
-                lblArtis.Text = "Artist"
-            End If
-
-            lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
-            lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+            tampilJudul()
         Else
             MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
         End If
@@ -358,73 +359,64 @@ Public Class mainForm
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
-        Index += 1
+
         If playlistOri.Count <> 0 Then
-            'Shuffle
-            If shuffle = True And repeatOne = False And repeatPlaylist = False Then
-                Dim indexShuffle As Integer = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
-                Try
-                    AxWindowsMediaPlayer1.URL = queueShuffle(indexShuffle + 1)
-                    lstShuffle.Add(queueShuffle(indexShuffle + 1))
-                    queueShuffle.Remove(queueShuffle(indexShuffle + 1))
-                Catch
-                    AxWindowsMediaPlayer1.URL = queueShuffle(0)
-                    lstShuffle.Add(queueShuffle(0))
-                    queueShuffle.Remove(queueShuffle(0))
-                End Try
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
+            ''Shuffle
+            'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
+            '    Dim indexShuffle As Integer = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = queueShuffle(indexShuffle + 1)
+            '        lstShuffle.Add(queueShuffle(indexShuffle + 1))
+            '        queueShuffle.Remove(queueShuffle(indexShuffle + 1))
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = queueShuffle(0)
+            '        lstShuffle.Add(queueShuffle(0))
+            '        queueShuffle.Remove(queueShuffle(0))
+            '    End Try
+            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
 
-                'Repeat one song
-            ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
+            '    'Repeat one song
+            'ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
+            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
 
-                'Repeat one playlist
-            ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
-                Try
-                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-                Catch
-                    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                End Try
-                AxWindowsMediaPlayer1.Ctlcontrols.play()
+            '    'Repeat one playlist
+            'ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = playlistOri(0)
+            '    End Try
+            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
 
-                'Play sesuai pilihan
-            ElseIf lvPlaylist.SelectedItems.Count = 1 Then
-                Try
-                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-                Catch
-                    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                End Try
+            '    'Play sesuai pilihan
+            'ElseIf lvPlaylist.SelectedItems.Count = 1 Then
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = playlistOri(0)
+            '    End Try
 
-                'Play normal
-            Else
-                Try
-                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-                Catch
-                    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                End Try
-            End If
+            '    'Play normal
+            'Else
+            '    Try
+            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
+            '    Catch
+            '        AxWindowsMediaPlayer1.URL = playlistOri(0)
+            '    End Try
+            'End If
+
+            Try
+                AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
+            Catch
+                AxWindowsMediaPlayer1.URL = playlistOri(0)
+            End Try
+
             Timer1.Enabled = True
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
 
             'Menampilkan judul dan artis
-            Dim file As Mp3 = New Mp3(AxWindowsMediaPlayer1.URL, Mp3Permissions.Read)
-            Dim tag As Id3Tag = New Id3Tag()
-            If file.HasTags Then
-                If file.HasTagOfVersion(Id3Version.V1X) Then
-                    tag = file.GetTag(Id3TagFamily.Version1X)
-                ElseIf file.HasTagOfVersion(Id3Version.V23) Then
-                    tag = file.GetTag(Id3TagFamily.Version2X)
-                End If
-                lblJudul.Text = tag.Title
-                lblArtis.Text = tag.Artists
-            Else
-                lblJudul.Text = AxWindowsMediaPlayer1.URL.Split("\")(AxWindowsMediaPlayer1.URL.Split("\").Count - 1)
-                lblArtis.Text = "Artist"
-            End If
-
-            lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
-            lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+            tampilJudul()
         Else
             MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
         End If
@@ -439,45 +431,54 @@ Public Class mainForm
         End If
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        AxWindowsMediaPlayer1.CreateControl()
+    Private Sub NormalPlaySong() 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
+        Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
 
+        If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
+        AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
+            If playlistOri.Count > 0 And isStop = False Then
+                Try
+                    AxWindowsMediaPlayer1.URL = (playlistOri(indexLaguSkrg + 1))
+                    'IndexLagu += 1
+                    tampilJudul()
+                Catch outRange As System.ArgumentOutOfRangeException
+                    AxWindowsMediaPlayer1.URL = (playlistOri(indexLaguSkrg))
+                    lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
+                    lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+
+                    TimerJudul.Enabled = False
+                    Timer1.Enabled = False
+                    btnPlay.Text = "play"
+                    btnPlay.Image = Image.FromFile("Images/play.png")
+
+                    IndexLagu -= 1
+
+                    MessageBox.Show("End of Playlist")
+                End Try
+
+            ElseIf isStop = True Then
+                AxWindowsMediaPlayer1.Ctlcontrols.play()
+                isStop = False
+            End If
+        End If
+    End Sub
+
+    Private Sub DurationAndSeekBarSetter() 'buat set seekbar sama duration label
         If AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
-            'Progress bar untuk lagu
-            'tbSong.Maximum = AxWindowsMediaPlayer1.currentMedia.duration
-            'tbSong.Value = AxWindowsMediaPlayer1.Ctlcontrols.currentPosition
-            'tbSong.Increment(1)
-
             TrackBar1.Maximum = AxWindowsMediaPlayer1.currentMedia.duration
             TrackBar1.Value = AxWindowsMediaPlayer1.Ctlcontrols.currentPosition
 
             lblEndDuration.Text = AxWindowsMediaPlayer1.currentMedia.durationString
             lblStartDuration.Text = AxWindowsMediaPlayer1.Ctlcontrols.currentPositionString
         End If
+    End Sub
 
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        AxWindowsMediaPlayer1.CreateControl()
 
-        If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
-        AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
-            If playlistOri.Count > 0 Then
-                Try
-                    'AxWindowsMediaPlayer1.currentMedia = AxWindowsMediaPlayer1.newMedia(playlistOri(Index))
-                    AxWindowsMediaPlayer1.URL = (playlistOri(Index))
-                    Index += 1
-                    tampilJudul()
-                Catch outRange As System.ArgumentOutOfRangeException
-                    TimerJudul.Enabled = False
-                    Timer1.Enabled = False
-                    MessageBox.Show("END")
-                    'Index = -1
-                End Try
+        DurationAndSeekBarSetter() 'set seekbar & duration
 
-                'If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsMediaEnded Then
-                '    TimerJudul.Enabled = False
-                'End If
-            End If
-        End If
-
-        'Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
+        NormalPlaySong() 'normal play
 
         'If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsTransitioning And AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
         '    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
@@ -529,7 +530,6 @@ Public Class mainForm
         'End If
     End Sub
 
-
     Private Sub mainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         tbVolume.Value = 30
         lblEndDuration.Text = "00:00"
@@ -545,29 +545,30 @@ Public Class mainForm
         tbVolume.Enabled = False
     End Sub
 
-    Private Sub btnLirik_Click(sender As Object, e As EventArgs) Handles btnLirik.Click
-        If AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
-            frmLirik.ShowDialog()
-        Else
-            MessageBox.Show("Please play a song first before opening lyric", "Error Message")
-        End If
-    End Sub
-
+    ' settingan buat volume
     Private Sub tbVolume_Scroll(sender As Object, e As EventArgs) Handles tbVolume.Scroll
         AxWindowsMediaPlayer1.settings.volume = tbVolume.Value
     End Sub
 
+    'settingan buat seekbar
+    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+        Dim hms = TimeSpan.FromSeconds(TrackBar1.Value)
+        If TrackBar1.Maximum > 3600 Then
+            lblStartDuration.Text = $"{hms.Hours.ToString}:{hms.Minutes.ToString}:{hms.Seconds.ToString}"
+        Else
+            lblStartDuration.Text = $"{hms.Minutes.ToString}:{hms.Seconds.ToString}"
+        End If
+    End Sub
+
+    'settingan buat seekbar
     Private Sub TrackBar1_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TrackBar1.MouseUp
         AxWindowsMediaPlayer1.Ctlcontrols.currentPosition = TrackBar1.Value
         Timer1.Enabled = True
     End Sub
 
+    'settingan buat seekbar
     Private Sub TrackBar1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TrackBar1.MouseDown
         Timer1.Enabled = False
-    End Sub
-
-    Private Sub TrackBar1_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TrackBar1.MouseLeave
-        'Timer1.Enabled = True
     End Sub
 
     Private Sub DownloadMusicToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles DownloadMusicToolStripMenuItem1.Click
@@ -581,15 +582,4 @@ Public Class mainForm
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         MessageBox.Show($"This software built by {vbCrLf} Richard Lois Setiawan NIM.71200594 {vbCrLf} Haniif Ahmad Candraputra NIM. 71200660", "About this software", MessageBoxButtons.OK)
     End Sub
-
-    Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
-        Dim hms = TimeSpan.FromSeconds(TrackBar1.Value)
-        If TrackBar1.Maximum > 3600 Then
-            lblStartDuration.Text = $"{hms.Hours.ToString}:{hms.Minutes.ToString}:{hms.Seconds.ToString}"
-        Else
-            lblStartDuration.Text = $"{hms.Minutes.ToString}:{hms.Seconds.ToString}"
-        End If
-    End Sub
-
-
 End Class
