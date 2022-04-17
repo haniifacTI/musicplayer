@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "9a4d1fac-aba7-4570-8791-099c750a12b7": {
+      "ProjectGuid": "9a4d1fac-aba7-4570-8791-099c750a12b7",
+      "DisplayName": "MP3 Player",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
