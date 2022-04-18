@@ -5,12 +5,14 @@ Public Class mainForm
     Dim frmLirik As New frmLirik
     Dim playlistPath As String
     Dim startpath As String = Application.StartupPath
+    Dim rnd As New Random
 
-    Dim shuffle As Boolean = False
-    Dim repeatOne As Boolean = False
-    Dim repeatPlaylist As Boolean = False
+    Dim isShuffle As Boolean = False
+    Dim isRepeatSong As Boolean = False
+    Dim isRepeatPlaylist As Boolean = False
     Dim isStop As Boolean
     Dim isEnded As Boolean = False
+    Dim idxSongBefore As Integer
 
     Dim playlistOri As New List(Of String)
     Dim lstShuffle As New List(Of String)
@@ -51,14 +53,22 @@ Public Class mainForm
         lvPlaylist.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
     End Sub
 
-    'Private Sub shuffleSong()
-    '    Dim rnd As New Random
-    '    For i As Integer = 0 To lstShuffle.Count - 1
-    '        Dim shuffleIndex = rnd.Next(0, lstShuffle.Count - 1)
-    '        queueShuffle.Add(lstShuffle(shuffleIndex))
-    '        lstShuffle.Remove(lstShuffle(shuffleIndex))
-    '    Next
-    'End Sub
+    Private Sub shuffleAlgo()
+        queueShuffle.Clear()
+        Dim shuffleIndex As Integer
+        For i As Integer = 0 To lstShuffle.Count - 1
+            shuffleIndex = rnd.Next(0, lstShuffle.Count)
+            queueShuffle.Add(lstShuffle(shuffleIndex))
+            lstShuffle.RemoveAt(shuffleIndex)
+        Next
+
+        Dim hasil As String() = Directory.GetFiles(playlistPath, "*.mp3", SearchOption.TopDirectoryOnly)
+        For i As Integer = 0 To hasil.Length - 1
+            Dim file As Mp3 = New Mp3(hasil(i), Mp3Permissions.Read)
+            Dim fileName As String = Path.GetFileNameWithoutExtension(hasil(i))
+            lstShuffle.Add(playlistPath & "\" & fileName & ".mp3")
+        Next
+    End Sub
 
     Private Sub AddPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddPlaylistToolStripMenuItem.Click
         If FolderBrowserDialog1.ShowDialog = DialogResult.OK Then
@@ -74,9 +84,9 @@ Public Class mainForm
             TrackBar1.Enabled = True
             tbVolume.Enabled = True
             'btnLirik.Enabled = True
-            'btnRepeatPlaylist.Enabled = True
-            'btnRepeatSong.Enabled = True
-            'btnShuffle.Enabled = True
+            btnRepeatPlaylist.Enabled = True
+            btnRepeatSong.Enabled = True
+            btnShuffle.Enabled = True
         End If
     End Sub
 
@@ -149,56 +159,67 @@ Public Class mainForm
     '    End Select
     'End Sub
 
-    'Private Sub btnRepeatPlaylist_Click(sender As Object, e As EventArgs) Handles btnRepeatPlaylist.Click
-    '    If playlistOri.Count = 0 Then
-    '        MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Repeat Playlist")
-    '    ElseIf repeatOne = True Or shuffle = True Then
-    '        MsgBox("Repeat playlist tidak bisa dilakukan bersamaan dengan shuffle atau repeat one song",, "Repeat Playlist")
-    '    ElseIf btnRepeatPlaylist.FlatStyle = FlatStyle.Standard Then
-    '        repeatPlaylist = False
-    '        btnRepeatPlaylist.FlatStyle = FlatStyle.Flat
-    '        btnRepeatPlaylist.FlatAppearance.BorderSize = 0
-    '    Else
-    '        repeatPlaylist = True
-    '        btnRepeatPlaylist.FlatStyle = FlatStyle.Standard
-    '        btnRepeatPlaylist.FlatAppearance.BorderSize = 1
-    '    End If
-    'End Sub
+    Private Sub btnRepeatPlaylist_Click(sender As Object, e As EventArgs) Handles btnRepeatPlaylist.Click
+        If isRepeatPlaylist = False Then 'klik nyalain repeatplaylist
+            isRepeatPlaylist = True
+            isRepeatSong = False
 
-    'Private Sub btnRepeatSong_Click(sender As Object, e As EventArgs) Handles btnRepeatSong.Click
-    '    If playlistOri.Count = 0 Then
-    '        MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Repeat One Song")
-    '    ElseIf repeatPlaylist = True Or shuffle = True Then
-    '        MsgBox("Repeat one song tidak bisa dilakukan bersamaan dengan shuffle atau repeat playlist",, "Repeat One Song")
-    '    ElseIf lvPlaylist.SelectedItems.Count <> 1 Then
-    '        MsgBox("Silahkan pilih lagu yang akan direpeat",, "Repeat One SOng")
-    '    ElseIf btnRepeatSong.FlatStyle = FlatStyle.Standard Then
-    '        repeatOne = False
-    '        btnRepeatSong.FlatStyle = FlatStyle.Flat
-    '        btnRepeatSong.FlatAppearance.BorderSize = 0
-    '    Else
-    '        repeatOne = True
-    '        btnRepeatSong.FlatStyle = FlatStyle.Standard
-    '        btnRepeatSong.FlatAppearance.BorderSize = 1
-    '    End If
-    'End Sub
+            btnRepeatSong.Enabled = False
+            btnRepeatPlaylist.FlatStyle = FlatStyle.Flat
 
-    'Private Sub btnShuffle_Click(sender As Object, e As EventArgs) Handles btnShuffle.Click
-    '    If playlistOri.Count = 0 Then
-    '        MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Shuffle")
-    '    ElseIf repeatOne = True Or repeatPlaylist = True Then
-    '        MsgBox("Shuffle tidak bisa dilakukan bersamaan dengan repeat",, "Shuffle")
-    '    ElseIf btnShuffle.FlatStyle = FlatStyle.Standard Then
-    '        shuffle = False
-    '        btnShuffle.FlatStyle = FlatStyle.Flat
-    '        btnShuffle.FlatAppearance.BorderSize = 0
-    '    Else
-    '        shuffle = True
-    '        btnShuffle.FlatStyle = FlatStyle.Standard
-    '        btnShuffle.FlatAppearance.BorderSize = 1
-    '        shuffleSong()
-    '    End If
-    'End Sub
+            btnRepeatPlaylist.FlatStyle = FlatStyle.Standard
+            btnRepeatPlaylist.FlatAppearance.BorderSize = 1
+        ElseIf isRepeatPlaylist = True Then 'klik matiin repeatplaylist
+            isRepeatPlaylist = False
+
+            btnRepeatSong.Enabled = True
+
+            btnRepeatPlaylist.FlatStyle = FlatStyle.Flat
+            btnRepeatPlaylist.FlatAppearance.BorderSize = 0
+        End If
+    End Sub
+
+    Private Sub btnRepeatSong_Click(sender As Object, e As EventArgs) Handles btnRepeatSong.Click
+        If isRepeatSong = False Then 'klik nyalain repeatsong
+            isRepeatSong = True
+            isRepeatPlaylist = False
+            isShuffle = False
+
+            btnRepeatPlaylist.Enabled = False 'biar tombol repeatplaylist gbs di klik
+            btnRepeatSong.FlatStyle = FlatStyle.Flat
+
+            btnShuffle.Enabled = False 'matiin tombol shuffle
+            btnShuffle.FlatStyle = FlatStyle.Flat
+
+            btnRepeatSong.FlatStyle = FlatStyle.Standard
+        ElseIf isRepeatSong = True Then 'klik matiin repeatsong
+            isRepeatSong = False
+
+            btnRepeatPlaylist.Enabled = True
+            btnShuffle.Enabled = True
+
+            btnRepeatSong.FlatStyle = FlatStyle.Flat
+        End If
+    End Sub
+
+    Private Sub btnShuffle_Click(sender As Object, e As EventArgs) Handles btnShuffle.Click
+        If AxWindowsMediaPlayer1.currentMedia Is Nothing Then
+            shuffleAlgo()
+            isShuffle = True
+            btnShuffle.FlatStyle = FlatStyle.Standard
+            isEnded = True
+            MsgBox("Shuffle Created")
+            outqShuffle()
+        Else
+            If isShuffle = True Then
+                isShuffle = False
+                btnShuffle.FlatStyle = FlatStyle.Flat
+            ElseIf isShuffle = False Then
+                isShuffle = True
+                btnShuffle.FlatStyle = FlatStyle.Standard
+            End If
+        End If
+    End Sub
 
     Private Sub btnStop_Click(sender As Object, e As EventArgs) Handles btnStop.Click
         lblStartDuration.Text = "00:00"
@@ -218,37 +239,8 @@ Public Class mainForm
 
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
         'Menandakan play
-        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And isStop = False Then
+        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And isStop = False And isEnded = False Then
             If playlistOri.Count <> 0 Then
-                ''shuffle
-                'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
-                '    AxWindowsMediaPlayer1.URL = queueShuffle(0)
-                '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-                '    lstShuffle.Add(queueShuffle(0))
-                '    queueShuffle.Remove(queueShuffle(0))
-
-                '    'repeat one song
-                'ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
-                '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-                '    'repeat one playlist
-                'ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
-                '    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-                '    'play sesuai pilihan
-                'ElseIf lvPlaylist.SelectedItems.Count = 1 Then
-                '    AxWindowsMediaPlayer1.URL = playlistPath & "\" & lvPlaylist.SelectedItems(0).Text & ".mp3"
-                '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-                '    'play normal
-                'Else
-                '    AxWindowsMediaPlayer1.URL = playlistOri(0)
-                '    If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsReady Then
-                '        AxWindowsMediaPlayer1.Ctlcontrols.play()
-                '    End If
-                'End If
-
                 Timer1.Enabled = True
                 btnPlay.Image = Image.FromFile("Images/pause.png")
                 btnPlay.Text = "pause"
@@ -257,22 +249,28 @@ Public Class mainForm
                     AxWindowsMediaPlayer1.URL = playlistOri(0)
                 End If
 
-                'tampilin judul
-                tampilJudul()
+                tampilJudul() 'tampilin judul
             Else
                 MsgBox("Please add the playlist first.",, "Play")
             End If
 
         ElseIf isEnded Then ' kalau playlist end tapi orgnya mau ngeplay
-            AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
+            If isShuffle = True Then
+                AxWindowsMediaPlayer1.URL = queueShuffle(0)
+            Else
+                AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
+            End If
+
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
+            tampilJudul()
             AxWindowsMediaPlayer1.Ctlcontrols.play()
             TimerJudul.Enabled = True
             Timer1.Enabled = True
             isStop = False
             isEnded = False
             MessageBox.Show("Play Button Pressed : End Play", "DEBUG btnPlay_Click()") ' DEBUG
+
         ElseIf (btnPlay.Text = "play" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused) Or isStop Then 'buat ngeplay setelah di pause 
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
@@ -300,51 +298,7 @@ Public Class mainForm
     Private Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
 
-        If playlistOri.Count <> 0 Then
-            ''Shuffle
-            'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
-            '    Dim indexShuffle As Integer = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = queueShuffle(indexShuffle - 1)
-            '        lstShuffle.Add(queueShuffle(indexShuffle - 1))
-            '        queueShuffle.Remove(queueShuffle(indexShuffle - 1))
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = queueShuffle(queueShuffle.Count - 1)
-            '        lstShuffle.Add(queueShuffle(queueShuffle.Count - 1))
-            '        queueShuffle.Remove(queueShuffle(queueShuffle.Count - 1))
-            '    End Try
-            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-            '    'Repeat one song
-            'ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
-            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-            '    'Repeat one playlist
-            'ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
-            '    End Try
-            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-            '    'Play sesuai pilihan
-            'ElseIf lvPlaylist.SelectedItems.Count = 1 Then
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
-            '    End Try
-
-            '    'Play normal
-            'Else
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = playlistOri(playlistOri.Count - 1)
-            '    End Try
-            'End If
-
+        If isShuffle = False Then
             Try
                 AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
             Catch
@@ -359,59 +313,32 @@ Public Class mainForm
 
             'Menampilkan judul dan artis
             tampilJudul()
-        Else
-            MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
+
+        ElseIf isShuffle = True Then
+            Dim shuffleIndex As Integer = rnd.Next(0, playlistOri.Count)
+            While shuffleIndex = indexLaguSkrg
+                shuffleIndex = rnd.Next(0, playlistOri.Count)
+            End While
+            AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
+
+            Timer1.Enabled = True
+            isStop = False
+            isEnded = False
+            btnPlay.Image = Image.FromFile("Images/pause.png")
+            btnPlay.Text = "pause"
+
+            If queueShuffle.Count <= 1 Then
+                shuffleAlgo()
+            End If
+
+            tampilJudul() 'Menampilkan judul dan artis
         End If
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
 
-        If playlistOri.Count <> 0 Then
-            ''Shuffle
-            'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
-            '    Dim indexShuffle As Integer = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = queueShuffle(indexShuffle + 1)
-            '        lstShuffle.Add(queueShuffle(indexShuffle + 1))
-            '        queueShuffle.Remove(queueShuffle(indexShuffle + 1))
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = queueShuffle(0)
-            '        lstShuffle.Add(queueShuffle(0))
-            '        queueShuffle.Remove(queueShuffle(0))
-            '    End Try
-            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-            '    'Repeat one song
-            'ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
-            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-            '    'Repeat one playlist
-            'ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = playlistOri(0)
-            '    End Try
-            '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-
-            '    'Play sesuai pilihan
-            'ElseIf lvPlaylist.SelectedItems.Count = 1 Then
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = playlistOri(0)
-            '    End Try
-
-            '    'Play normal
-            'Else
-            '    Try
-            '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-            '    Catch
-            '        AxWindowsMediaPlayer1.URL = playlistOri(0)
-            '    End Try
-            'End If
-
+        If isShuffle = False Then
             Try
                 AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
             Catch
@@ -426,8 +353,24 @@ Public Class mainForm
 
             'Menampilkan judul dan artis
             tampilJudul()
-        Else
-            MsgBox("Silahkan pilih folder playlist terlebih dahulu",, "Play")
+        ElseIf isShuffle = True Then
+            Dim shuffleIndex As Integer = rnd.Next(0, playlistOri.Count)
+            While shuffleIndex = indexLaguSkrg
+                shuffleIndex = rnd.Next(0, playlistOri.Count)
+            End While
+            AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
+
+            Timer1.Enabled = True
+            isStop = False
+            isEnded = False
+            btnPlay.Image = Image.FromFile("Images/pause.png")
+            btnPlay.Text = "pause"
+
+            If queueShuffle.Count <= 1 Then
+                shuffleAlgo()
+            End If
+
+            tampilJudul() 'Menampilkan judul dan artis
         End If
     End Sub
 
@@ -440,9 +383,7 @@ Public Class mainForm
         End If
     End Sub
 
-    Private Sub NormalPlaySong(sender As Object, e As EventArgs) 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
-        Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
-
+    Private Sub NormalPlaySong(sender As Object, e As EventArgs, indexLaguSkrg As Integer) 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
         If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
         AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
             If playlistOri.Count > 0 And isStop = False Then
@@ -464,8 +405,88 @@ Public Class mainForm
                     isEnded = True
                 End Try
             End If
+        End If
+    End Sub
+
+    Private Sub RepeatPlaylistPlay(indexLaguSkrg As Integer) 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
+        If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
+        AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
+            If playlistOri.Count > 0 And isStop = False Then
+                Try
+                    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
+                    tampilJudul()
+                Catch outRange As System.ArgumentOutOfRangeException
+                    AxWindowsMediaPlayer1.URL = playlistOri(0)
+                    tampilJudul()
+                End Try
+            End If
+        End If
+    End Sub
+
+    Sub outqShuffle()
+        Dim out As String = ""
+        For i = 0 To queueShuffle.Count() - 1
+            out += queueShuffle(i) & vbCrLf
+        Next
+        MessageBox.Show(out)
+    End Sub
+
+    Private Sub RepeatPlaySong(indexLaguSkrg As Integer)
+        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg)
+        tampilJudul()
+    End Sub
+    Private Sub ShufflePlay(sender As Object, e As EventArgs)
+        If queueShuffle.Count = 0 Then
+            shuffleAlgo()
+            MessageBox.Show("Create Suffle Queue")
+            outqShuffle()
+        End If
+
+        If (AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
+            AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped) And isStop = False Then
+
+            Dim idxQueueShuffle As Integer
+            If AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
+                idxQueueShuffle = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
+            End If
+
+            Try
+                If queueShuffle.Count > 1 Then
+                    queueShuffle.RemoveAt(idxQueueShuffle)
+                    AxWindowsMediaPlayer1.URL = queueShuffle(0)
+                    tampilJudul()
+                    MessageBox.Show("Next Shuffle Song")
+                    outqShuffle()
+                ElseIf queueShuffle.Count = 1 Then
+                    If isRepeatPlaylist = True Then
+                        AxWindowsMediaPlayer1.URL = queueShuffle(0)
+                        tampilJudul()
+                        queueShuffle.Clear()
+                        shuffleAlgo()
+                        MessageBox.Show("Repeat Shuffle")
+                    ElseIf isRepeatPlaylist = False Then
+                        AxWindowsMediaPlayer1.URL = queueShuffle(0)
+                        tampilJudul()
+                        btnStop_Click(sender, e)
+                        lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
+                        lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+
+                        TimerJudul.Enabled = False
+                        Timer1.Enabled = False
+                        btnPlay.Text = "play"
+                        btnPlay.Image = Image.FromFile("images/play.png")
+
+                        outqShuffle()
+                        MessageBox.Show("End of Playlist (isrepeat false)", "DEBUG ShufflePlay()")
+                        isEnded = True
+                    End If
+                End If
+            Catch outRange As System.ArgumentOutOfRangeException
+                shuffleAlgo()
+            End Try
 
         End If
+
     End Sub
 
     Private Sub DurationAndSeekBarSetter() 'buat set seekbar sama duration label
@@ -479,60 +500,24 @@ Public Class mainForm
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
         AxWindowsMediaPlayer1.CreateControl()
 
         DurationAndSeekBarSetter() 'set seekbar & duration
 
-        NormalPlaySong(sender, e) 'normal play
-
-        'If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsTransitioning And AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
-        '    AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-        '    AxWindowsMediaPlayer1.Ctlcontrols.play()
-        '    Timer1.Enabled = False
-        '    tampilJudul()
-        'End If
-
-        ''Shuffle
-        'If shuffle = True And repeatOne = False And repeatPlaylist = False Then
-        '    If queueShuffle.Count < 1 Then
-        '        shuffleSong()
-        '    End If
-        '    If tbSong.Value = tbSong.Maximum Then
-        '        AxWindowsMediaPlayer1.URL = queueShuffle(0)
-        '        AxWindowsMediaPlayer1.Ctlcontrols.play()
-        '        lstShuffle.Add(queueShuffle(0))
-        '        queueShuffle.Remove(queueShuffle(0))
-        '    End If
-
-        '    'Repeat one song
-        'ElseIf shuffle = False And repeatOne = True And repeatPlaylist = False Then
-        '    If tbSong.Value = tbSong.Maximum Then
-        '        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg)
-        '        AxWindowsMediaPlayer1.Ctlcontrols.play()
-        '    End If
-
-        '    'Repeat one playlist
-        'ElseIf shuffle = False And repeatOne = False And repeatPlaylist = True Then
-        '    If tbSong.Value = tbSong.Maximum Then
-        '        Try
-        '            AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
-        '            AxWindowsMediaPlayer1.Ctlcontrols.play()
-        '        Catch
-        '            AxWindowsMediaPlayer1.URL = playlistOri(0)
-        '            AxWindowsMediaPlayer1.Ctlcontrols.play()
-        '        End Try
-        '    End If
-
-        '    'Play Normal
-        'Else
-        '    If tbSong.Value >= tbSong.Maximum Then
-        '        Try
-        '            AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg)
-        '            AxWindowsMediaPlayer1.Ctlcontrols.play()
-        '        Catch
-        '        End Try
-        '    End If
-        'End If
+        If isRepeatSong = True Then
+            If AxWindowsMediaPlayer1.playState <> WMPLib.WMPPlayState.wmppsPlaying Then
+                RepeatPlaySong(indexLaguSkrg) 'repeat song
+            End If
+        ElseIf isRepeatPlaylist = True And isShuffle = False Then
+            RepeatPlaylistPlay(indexLaguSkrg)
+        ElseIf isRepeatPlaylist = True And isShuffle = True Then
+            ShufflePlay(sender, e)
+        ElseIf isShuffle = True Then
+            ShufflePlay(sender, e)
+        Else
+            NormalPlaySong(sender, e, indexLaguSkrg) 'normal play
+        End If
     End Sub
 
     Private Sub mainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load

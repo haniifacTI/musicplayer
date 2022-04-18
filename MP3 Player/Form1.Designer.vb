@@ -46,7 +46,6 @@ Partial Class mainForm
         Me.lblJudul = New System.Windows.Forms.Label()
         Me.lblArtis = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnPlay = New System.Windows.Forms.Button()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
@@ -71,7 +70,7 @@ Partial Class mainForm
         Me.btnRepeatPlaylist.FlatAppearance.BorderSize = 0
         Me.btnRepeatPlaylist.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRepeatPlaylist.Image = CType(resources.GetObject("btnRepeatPlaylist.Image"), System.Drawing.Image)
-        Me.btnRepeatPlaylist.Location = New System.Drawing.Point(24, 130)
+        Me.btnRepeatPlaylist.Location = New System.Drawing.Point(23, 129)
         Me.btnRepeatPlaylist.Margin = New System.Windows.Forms.Padding(4)
         Me.btnRepeatPlaylist.Name = "btnRepeatPlaylist"
         Me.btnRepeatPlaylist.Size = New System.Drawing.Size(38, 36)
@@ -84,10 +83,10 @@ Partial Class mainForm
         Me.btnRepeatSong.FlatAppearance.BorderSize = 0
         Me.btnRepeatSong.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRepeatSong.Image = CType(resources.GetObject("btnRepeatSong.Image"), System.Drawing.Image)
-        Me.btnRepeatSong.Location = New System.Drawing.Point(77, 130)
+        Me.btnRepeatSong.Location = New System.Drawing.Point(74, 130)
         Me.btnRepeatSong.Margin = New System.Windows.Forms.Padding(4)
         Me.btnRepeatSong.Name = "btnRepeatSong"
-        Me.btnRepeatSong.Size = New System.Drawing.Size(31, 36)
+        Me.btnRepeatSong.Size = New System.Drawing.Size(38, 36)
         Me.btnRepeatSong.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.btnRepeatSong, "Repeat Song")
         Me.btnRepeatSong.UseVisualStyleBackColor = True
@@ -99,10 +98,10 @@ Partial Class mainForm
         Me.btnShuffle.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnShuffle.ForeColor = System.Drawing.SystemColors.ControlText
         Me.btnShuffle.Image = CType(resources.GetObject("btnShuffle.Image"), System.Drawing.Image)
-        Me.btnShuffle.Location = New System.Drawing.Point(126, 129)
+        Me.btnShuffle.Location = New System.Drawing.Point(124, 129)
         Me.btnShuffle.Margin = New System.Windows.Forms.Padding(4)
         Me.btnShuffle.Name = "btnShuffle"
-        Me.btnShuffle.Size = New System.Drawing.Size(33, 36)
+        Me.btnShuffle.Size = New System.Drawing.Size(46, 36)
         Me.btnShuffle.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.btnShuffle, "Shuffle Playlist")
         Me.btnShuffle.UseVisualStyleBackColor = False
@@ -411,7 +410,6 @@ Partial Class mainForm
     Friend WithEvents lblArtis As Label
     Friend WithEvents Timer1 As Timer
     Friend WithEvents AxWindowsMediaPlayer1 As AxWMPLib.AxWindowsMediaPlayer
-    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
     Friend WithEvents chSong As ColumnHeader
     Friend WithEvents chArtist As ColumnHeader
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
