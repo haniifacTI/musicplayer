@@ -1,14 +1,14 @@
-##Current Version Changelog
+## Current Version Changelog
 Changelog V1.1 (new repeat and shuffle feature)
 + added repeat playlist feature
 + added repeat one song feature
 + added shuffle playlis feature
 
-##Currently working on
+## Currently working on
 1. lyric 
 2. bug fix
 
-##Older Version Changelog
+## Older Version Changelog
 Changelog V1.0 (major bug fix)
 + bug fix when playlist ended, music is autoplayed.
 + bug fix next and previous when playlist ended, music cannot be played nor skipped (next/prev).
