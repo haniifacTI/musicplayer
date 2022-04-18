@@ -83,7 +83,7 @@ Public Class mainForm
             btnPrev.Enabled = True
             TrackBar1.Enabled = True
             tbVolume.Enabled = True
-            'btnLirik.Enabled = True
+            btnLirik.Enabled = True
             btnRepeatPlaylist.Enabled = True
             btnRepeatSong.Enabled = True
             btnShuffle.Enabled = True
@@ -289,9 +289,14 @@ Public Class mainForm
 
     Private Sub btnLirik_Click(sender As Object, e As EventArgs) Handles btnLirik.Click
         If AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
-            frmLirik.ShowDialog()
+            Try
+                frmLirik.Show()
+            Catch exDispose As System.ObjectDisposedException
+                frmLirik = New frmLirik
+                frmLirik.Show()
+            End Try
         Else
-            MessageBox.Show("Please play a song first before opening lyric", "Error Message")
+            MessageBox.Show("Please play a song first before opening lyrics", "Error Message")
         End If
     End Sub
 
