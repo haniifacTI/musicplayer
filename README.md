@@ -2,11 +2,11 @@
 Changelog V1.2 (new repeat and shuffle feature)
 + added lyrics with Regex feature to remove square bracket (used as Identifier on lyrics.txt)
 + added refresh feature to reload the lyrics when changing songs
-+ Copy Paste your own lyrics to use it later in the song
++ Copy, paste, and save your own lyrics to use it later in the song
 
 ## Currently working on
 1. bug fix
-2. edit button on Lyrics
+2. edit button on lyrics
 
 ## Older Version Changelog
 Changelog V1.1 (new repeat and shuffle feature)
