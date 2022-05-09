@@ -43,8 +43,6 @@ Public Class frmLirik
         Me.Hide()
     End Sub
 
-
-
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
         If isLyricFound = True Then
             'btnSave.Enabled = True

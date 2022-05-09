@@ -23,17 +23,18 @@ Partial Class frmLirik
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmLirik))
         Me.rtbLirik = New System.Windows.Forms.RichTextBox()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddLyricsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnEdit = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.RefreshToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -43,10 +44,9 @@ Partial Class frmLirik
         '
         Me.rtbLirik.Dock = System.Windows.Forms.DockStyle.Fill
         Me.rtbLirik.Location = New System.Drawing.Point(0, 0)
-        Me.rtbLirik.Margin = New System.Windows.Forms.Padding(4)
         Me.rtbLirik.Name = "rtbLirik"
         Me.rtbLirik.ReadOnly = True
-        Me.rtbLirik.Size = New System.Drawing.Size(505, 449)
+        Me.rtbLirik.Size = New System.Drawing.Size(379, 365)
         Me.rtbLirik.TabIndex = 0
         Me.rtbLirik.Text = ""
         '
@@ -56,7 +56,8 @@ Partial Class frmLirik
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(505, 28)
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(4, 2, 0, 2)
+        Me.MenuStrip1.Size = New System.Drawing.Size(379, 24)
         Me.MenuStrip1.TabIndex = 1
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -64,14 +65,26 @@ Partial Class frmLirik
         '
         Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddLyricsToolStripMenuItem, Me.RefreshToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
-        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(46, 24)
+        Me.NewToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.NewToolStripMenuItem.Text = "File"
         '
         'AddLyricsToolStripMenuItem
         '
         Me.AddLyricsToolStripMenuItem.Name = "AddLyricsToolStripMenuItem"
-        Me.AddLyricsToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.AddLyricsToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
         Me.AddLyricsToolStripMenuItem.Text = "&Add Lyrics"
+        '
+        'RefreshToolStripMenuItem
+        '
+        Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
+        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
+        Me.RefreshToolStripMenuItem.Text = "Refresh"
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
+        Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'ContextMenuStrip1
         '
@@ -79,18 +92,13 @@ Partial Class frmLirik
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
         '
-        'ExitToolStripMenuItem
-        '
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
-        Me.ExitToolStripMenuItem.Text = "Exit"
-        '
         'btnSave
         '
         Me.btnSave.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnSave.Location = New System.Drawing.Point(430, 0)
+        Me.btnSave.Location = New System.Drawing.Point(323, 0)
+        Me.btnSave.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnSave.Name = "btnSave"
-        Me.btnSave.Size = New System.Drawing.Size(75, 29)
+        Me.btnSave.Size = New System.Drawing.Size(56, 24)
         Me.btnSave.TabIndex = 2
         Me.btnSave.Text = "Save"
         Me.btnSave.UseVisualStyleBackColor = True
@@ -98,9 +106,10 @@ Partial Class frmLirik
         'btnEdit
         '
         Me.btnEdit.Dock = System.Windows.Forms.DockStyle.Right
-        Me.btnEdit.Location = New System.Drawing.Point(355, 0)
+        Me.btnEdit.Location = New System.Drawing.Point(267, 0)
+        Me.btnEdit.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Size = New System.Drawing.Size(75, 29)
+        Me.btnEdit.Size = New System.Drawing.Size(56, 24)
         Me.btnEdit.TabIndex = 3
         Me.btnEdit.Text = "Edit"
         Me.btnEdit.UseVisualStyleBackColor = True
@@ -109,9 +118,10 @@ Partial Class frmLirik
         '
         Me.Panel1.Controls.Add(Me.rtbLirik)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 28)
+        Me.Panel1.Location = New System.Drawing.Point(0, 24)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(505, 449)
+        Me.Panel1.Size = New System.Drawing.Size(379, 365)
         Me.Panel1.TabIndex = 4
         '
         'Panel2
@@ -119,29 +129,24 @@ Partial Class frmLirik
         Me.Panel2.Controls.Add(Me.btnEdit)
         Me.Panel2.Controls.Add(Me.btnSave)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 483)
+        Me.Panel2.Location = New System.Drawing.Point(0, 392)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(505, 29)
+        Me.Panel2.Size = New System.Drawing.Size(379, 24)
         Me.Panel2.TabIndex = 5
-        '
-        'RefreshToolStripMenuItem
-        '
-        Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
-        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
-        Me.RefreshToolStripMenuItem.Text = "Refresh"
         '
         'frmLirik
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(505, 512)
+        Me.ClientSize = New System.Drawing.Size(379, 416)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.MenuStrip1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "frmLirik"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Lyrics"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()

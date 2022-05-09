@@ -3,6 +3,7 @@ Imports Id3
 
 Public Class mainForm
     Dim frmLirik As New frmLirik
+    Dim frmTagEditor As New frmTagEditor
     Dim playlistPath As String
     Dim startpath As String = Application.StartupPath
     Dim rnd As New Random
@@ -10,13 +11,33 @@ Public Class mainForm
     Dim isShuffle As Boolean = False
     Dim isRepeatSong As Boolean = False
     Dim isRepeatPlaylist As Boolean = False
-    Dim isStop As Boolean
+    Dim isStop As Boolean = True
     Dim isEnded As Boolean = False
     Dim idxSongBefore As Integer
 
     Dim playlistOri As New List(Of String)
     Dim lstShuffle As New List(Of String)
     Dim queueShuffle As New List(Of String)
+
+    Private Sub AddPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddPlaylistToolStripMenuItem.Click
+        If FolderBrowserDialog1.ShowDialog = DialogResult.OK Then
+            playlistPath = FolderBrowserDialog1.SelectedPath
+            playlistOri.Clear()
+            queueShuffle.Clear()
+            lstShuffle.Clear()
+            getFiles()
+
+            btnStop.Enabled = True
+            btnNext.Enabled = True
+            btnPrev.Enabled = True
+            TrackBar1.Enabled = True
+            tbVolume.Enabled = True
+            btnLirik.Enabled = True
+            btnRepeatPlaylist.Enabled = True
+            btnRepeatSong.Enabled = True
+            btnShuffle.Enabled = True
+        End If
+    End Sub
 
     Private Sub getFiles()
         lvPlaylist.Items.Clear()
@@ -68,26 +89,6 @@ Public Class mainForm
             Dim fileName As String = Path.GetFileNameWithoutExtension(hasil(i))
             lstShuffle.Add(playlistPath & "\" & fileName & ".mp3")
         Next
-    End Sub
-
-    Private Sub AddPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddPlaylistToolStripMenuItem.Click
-        If FolderBrowserDialog1.ShowDialog = DialogResult.OK Then
-            playlistPath = FolderBrowserDialog1.SelectedPath
-            playlistOri.Clear()
-            queueShuffle.Clear()
-            lstShuffle.Clear()
-            getFiles()
-
-            btnStop.Enabled = True
-            btnNext.Enabled = True
-            btnPrev.Enabled = True
-            TrackBar1.Enabled = True
-            tbVolume.Enabled = True
-            btnLirik.Enabled = True
-            btnRepeatPlaylist.Enabled = True
-            btnRepeatSong.Enabled = True
-            btnShuffle.Enabled = True
-        End If
     End Sub
 
     Private Sub tampilJudul()
@@ -209,7 +210,7 @@ Public Class mainForm
             btnShuffle.FlatStyle = FlatStyle.Standard
             isEnded = True
             MsgBox("Shuffle Created")
-            outqShuffle()
+            'outqShuffle()
         Else
             If isShuffle = True Then
                 isShuffle = False
@@ -226,7 +227,6 @@ Public Class mainForm
         btnPlay.Image = Image.FromFile("Images/play.png")
         btnPlay.Text = "play"
         AxWindowsMediaPlayer1.Ctlcontrols.stop()
-        tbSong.Value = 0
         TrackBar1.Value = 0
         Timer1.Enabled = False
         TimerJudul.Enabled = False
@@ -239,17 +239,26 @@ Public Class mainForm
 
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
         'Menandakan play
-        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And isStop = False And isEnded = False Then
+        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And
+            isStop = True And isEnded = False Then
             If playlistOri.Count <> 0 Then
-                Timer1.Enabled = True
                 btnPlay.Image = Image.FromFile("Images/pause.png")
                 btnPlay.Text = "pause"
 
-                If AxWindowsMediaPlayer1.currentMedia Is Nothing Then
+                'Play sesuai pilihan di list
+                If lvPlaylist.SelectedItems.Count = 1 And isShuffle = False Then
+                    AxWindowsMediaPlayer1.URL = playlistPath & "\" & lvPlaylist.SelectedItems(0).Text & ".mp3"
+                    lvPlaylist.SelectedItems.Clear()
+                ElseIf isShuffle = True Then
+                    ShufflePlay(sender, e)
+                ElseIf AxWindowsMediaPlayer1.currentMedia Is Nothing Then
                     AxWindowsMediaPlayer1.URL = playlistOri(0)
                 End If
 
                 tampilJudul() 'tampilin judul
+                Timer1.Enabled = True
+                isStop = False
+                isEnded = False
             Else
                 MsgBox("Please add the playlist first.",, "Play")
             End If
@@ -269,16 +278,16 @@ Public Class mainForm
             Timer1.Enabled = True
             isStop = False
             isEnded = False
-            MessageBox.Show("Play Button Pressed : End Play", "DEBUG btnPlay_Click()") ' DEBUG
+            'MessageBox.Show("Play Button Pressed : End Play", "DEBUG btnPlay_Click()") ' DEBUG
 
-        ElseIf (btnPlay.Text = "play" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused) Or isStop Then 'buat ngeplay setelah di pause 
+        ElseIf (btnPlay.Text = "play" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused) Then 'buat ngeplay setelah di pause 
             btnPlay.Image = Image.FromFile("Images/pause.png")
             btnPlay.Text = "pause"
             AxWindowsMediaPlayer1.Ctlcontrols.play()
             TimerJudul.Enabled = True
             Timer1.Enabled = True
             isStop = False
-            MessageBox.Show("Play Button Stop/Pause to Play", "DEBUG btnPlay_Click()") 'DEBUG
+            'MessageBox.Show("Play Button Stop/Pause to Play", "DEBUG btnPlay_Click()") 'DEBUG
         ElseIf btnPlay.Text = "pause" And AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Then 'buat pause
             btnPlay.Image = Image.FromFile("Images/play.png")
             btnPlay.Text = "play"
@@ -392,6 +401,7 @@ Public Class mainForm
         If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
         AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
             If playlistOri.Count > 0 And isStop = False Then
+                'If playlistOri.Count > 0 Then
                 Try
                     AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
                     tampilJudul()
@@ -576,5 +586,30 @@ Public Class mainForm
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         MessageBox.Show($"This software built by {vbCrLf} Richard Lois Setiawan NIM.71200594 {vbCrLf} Haniif Ahmad Candraputra NIM. 71200660", "About this software", MessageBoxButtons.OK)
+    End Sub
+
+    Private Sub mainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+    End Sub
+
+    Private Sub mainForm_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        If Me.WindowState = FormWindowState.Minimized Then
+            NotifyIcon1.BalloonTipTitle = "MP3 Player"
+            NotifyIcon1.Visible = True
+            NotifyIcon1.Icon = Me.Icon
+            NotifyIcon1.BalloonTipIcon = ToolTipIcon.Info
+            'Me.Hide()
+            ShowInTaskbar = False
+        End If
+    End Sub
+
+    Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseDoubleClick
+        ShowInTaskbar = True
+        Me.WindowState = FormWindowState.Normal
+        NotifyIcon1.Visible = False
+    End Sub
+
+    Private Sub MusicTagEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MusicTagEditorToolStripMenuItem.Click
+        frmTagEditor.ShowDialog()
     End Sub
 End Class

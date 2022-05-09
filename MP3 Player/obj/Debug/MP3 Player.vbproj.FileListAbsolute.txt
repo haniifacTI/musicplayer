@@ -253,3 +253,61 @@ C:\Users\Haniif\Desktop\localmusic\MP3 Player\obj\Debug\MP3 Player.vbproj.CopyCo
 C:\Users\Haniif\Desktop\localmusic\MP3 Player\obj\Debug\MP3 Player.exe
 C:\Users\Haniif\Desktop\localmusic\MP3 Player\obj\Debug\MP3 Player.xml
 C:\Users\Haniif\Desktop\localmusic\MP3 Player\obj\Debug\MP3 Player.pdb
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\MP3 Player.exe.config
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\MP3 Player.exe
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\MP3 Player.pdb
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\MP3 Player.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\AngleSharp.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\CliWrap.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\cs-ffmpeg-mp3-converter.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Id3.Net.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\IniFile.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\JetBrains.Annotations.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Newtonsoft.Json.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Buffers.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Memory.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Numerics.Vectors.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Text.Encoding.CodePages.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Text.Encodings.Web.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Text.Json.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.ValueTuple.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.Converter.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\AngleSharp.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\CliWrap.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Id3.Net.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\JetBrains.Annotations.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Newtonsoft.Json.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Buffers.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Memory.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Numerics.Vectors.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Text.Encoding.CodePages.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Text.Encodings.Web.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Text.Json.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.Threading.Tasks.Extensions.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\System.ValueTuple.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.Converter.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Interop.WMPLib.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\AxInterop.WMPLib.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.AssemblyReference.cache
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.SuggestedBindingRedirects.cache
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\Interop.WMPLib.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\AxInterop.WMPLib.dll
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.ResolveComReference.cache
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3_Player.mainForm.resources
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3_Player.frmDownload.resources
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3_Player.frmLirik.resources
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3_Player.Resources.resources
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.GenerateResource.cache
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.CoreCompileInputs.cache
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.CopyComplete
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.exe
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.xml
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.pdb
+D:\2. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3_Player.frmTagEditor.resources
