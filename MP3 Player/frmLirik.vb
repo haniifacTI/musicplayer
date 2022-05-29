@@ -15,7 +15,6 @@ Public Class frmLirik
     End Function
 
     Private Sub frmLirik_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        btnEdit.Enabled = False
         btnSave.Enabled = False
 
         Try
@@ -43,7 +42,7 @@ Public Class frmLirik
         Me.Hide()
     End Sub
 
-    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+    Private Sub btnEdit_Click(sender As Object, e As EventArgs) 
         If isLyricFound = True Then
             'btnSave.Enabled = True
             'rtbLirik.ReadOnly = False
@@ -63,7 +62,6 @@ Public Class frmLirik
                 fileWrite.Close()
                 rtbLirik.Text = cleanLyrics
                 rtbLirik.ReadOnly = True
-                btnEdit.Enabled = True
                 btnSave.Enabled = False
                 MsgBox("Successfully saved.")
             Else
@@ -104,7 +102,6 @@ Public Class frmLirik
                     End If
                 End If
             End While
-            btnEdit.Enabled = True
             rtbLirik.Text = lyrics
         Else
             MsgBox("This Music lyrics is not yet added. Go to File > Add Lyrics.",, "Lyrics")
