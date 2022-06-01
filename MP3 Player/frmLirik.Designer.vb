@@ -42,8 +42,9 @@ Partial Class frmLirik
         'rtbLirik
         '
         Me.rtbLirik.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rtbLirik.Font = New System.Drawing.Font("Segoe UI Semibold", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rtbLirik.Location = New System.Drawing.Point(0, 0)
-        Me.rtbLirik.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rtbLirik.Margin = New System.Windows.Forms.Padding(4)
         Me.rtbLirik.Name = "rtbLirik"
         Me.rtbLirik.ReadOnly = True
         Me.rtbLirik.Size = New System.Drawing.Size(505, 449)
@@ -71,19 +72,19 @@ Partial Class frmLirik
         'AddLyricsToolStripMenuItem
         '
         Me.AddLyricsToolStripMenuItem.Name = "AddLyricsToolStripMenuItem"
-        Me.AddLyricsToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.AddLyricsToolStripMenuItem.Size = New System.Drawing.Size(159, 26)
         Me.AddLyricsToolStripMenuItem.Text = "&Add Lyrics"
         '
         'RefreshToolStripMenuItem
         '
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
-        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(159, 26)
         Me.RefreshToolStripMenuItem.Text = "Refresh"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(159, 26)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'ContextMenuStrip1
@@ -133,7 +134,7 @@ Partial Class frmLirik
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "frmLirik"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Lyrics"

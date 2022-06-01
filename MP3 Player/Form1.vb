@@ -266,53 +266,6 @@ Public Class mainForm
         End If
     End Sub
 
-    'Private Sub AxWindowsMediaPlayer1_CurrentItemChange(sender As Object, e As AxWMPLib._WMPOCXEvents_CurrentItemChangeEvent) Handles AxWindowsMediaPlayer1.CurrentItemChange
-    '    MessageBox.Show("CurrentItemChange: " & Me.AxWindowsMediaPlayer1.currentMedia.name)
-    'End Sub
-
-    'Private Sub AxWindowsMediaPlayer1_PlayStateChange(sender As Object, e As AxWMPLib._WMPOCXEvents_PlayStateChangeEvent) Handles AxWindowsMediaPlayer1.PlayStateChange
-    '    Select Case e.newState
-    '        Case 1 ' Stopped
-    '            MessageBox.Show("Stopped")
-
-    '        Case 2    ' Paused
-    '            MessageBox.Show("Paused")
-
-    '        Case 3 ' Playing
-    '            MessageBox.Show("Playing")
-
-    '        Case 4 ' ScanForward
-    '            MessageBox.Show("ScanForward")
-
-    '        Case 5 ' ScanReverse
-    '            MessageBox.Show("ScanReverse")
-
-    '        Case 6 ' Buffering
-    '            MessageBox.Show("Buffering")
-
-    '        Case 7 ' Waiting
-    '            MessageBox.Show("Waiting")
-
-    '        Case 8 ' MediaEnded
-    '            MessageBox.Show("MediaEnded")
-
-    '        Case 9 ' Transitioning
-    '            MessageBox.Show("Transitioning")
-
-    '        Case 10 ' Ready
-    '            MessageBox.Show("Ready")
-
-    '        Case 11 ' Reconnecting
-    '            MessageBox.Show("Reconnecting")
-
-    '        Case 12 ' Last
-    '            MessageBox.Show("Last")
-
-    '        Case Else
-    '            MessageBox.Show("Undefined/Unknown: " & e.newState)
-    '    End Select
-    'End Sub
-
     Private Sub btnRepeatPlaylist_Click(sender As Object, e As EventArgs) Handles btnRepeatPlaylist.Click
         If isRepeatPlaylist = False Then 'klik nyalain repeatplaylist
             isRepeatPlaylist = True
@@ -423,11 +376,14 @@ Public Class mainForm
             tampilJudul()
 
         ElseIf isShuffle = True Then
-            Dim shuffleIndex As Integer = rnd.Next(0, playlistOri.Count)
-            While shuffleIndex = indexLaguSkrg
-                shuffleIndex = rnd.Next(0, playlistOri.Count)
-            End While
-            AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
+            'Dim shuffleIndex As Integer = rnd.Next(0, playlistOri.Count)
+            'While shuffleIndex = indexLaguSkrg
+            '    shuffleIndex = rnd.Next(0, playlistOri.Count)
+            'End While
+            'AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
+
+            indexLaguSkrg = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
+            AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
 
             Timer1.Enabled = True
             isStop = False
@@ -462,11 +418,13 @@ Public Class mainForm
             'Menampilkan judul dan artis
             tampilJudul()
         ElseIf isShuffle = True Then
-            Dim shuffleIndex As Integer = rnd.Next(0, playlistOri.Count)
-            While shuffleIndex = indexLaguSkrg
-                shuffleIndex = rnd.Next(0, playlistOri.Count)
-            End While
-            AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
+            'Dim shuffleIndex As Integer = rnd.Next(0, playlistOri.Count)
+            'While shuffleIndex = indexLaguSkrg
+            '    shuffleIndex = rnd.Next(0, playlistOri.Count)
+            'End While
+            'AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
+            indexLaguSkrg = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
+            AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
 
             Timer1.Enabled = True
             isStop = False

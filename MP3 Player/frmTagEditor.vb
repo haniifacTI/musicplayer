@@ -80,38 +80,54 @@ Public Class frmTagEditor
         'Dim file As Mp3 = New Mp3(mainForm.playlistPath & "\" & mainForm.lvPlaylist.SelectedItems(0).Text & ".mp3",
         '    Mp3Permissions.ReadWrite)
         Dim pathSong As String
-        For Each song In mainForm.playlistOri
-            If song.Contains(mainForm.lvPlaylist.SelectedItems(0).Text) Then
-                pathSong = song
-                Exit For
-            End If
-        Next
-        Dim file As Mp3 = New Mp3(pathSong, Mp3Permissions.ReadWrite)
-        mainForm.AxWindowsMediaPlayer1.settings.autoStart = False
-        If mainForm.lvPlaylist.SelectedItems.Count = 1 Then
-            Dim tag As Id3Tag = New Id3Tag()
-            If file.HasTags Then
-                If file.HasTagOfVersion(Id3Version.V1X) Then
-                    tag = file.GetTag(Id3TagFamily.Version1X)
-                ElseIf file.HasTagOfVersion(Id3Version.V23) Then
-                    tag = file.GetTag(Id3TagFamily.Version2X)
+        Dim file As Mp3
+        Try
+            For Each song In mainForm.playlistOri
+                If song.Contains(mainForm.lvPlaylist.SelectedItems(0).Text) Then
+                    pathSong = song
+                    Exit For
                 End If
-                txtTrack.Text = tag.Track
-                txtTitle.Text = tag.Title
-                If tag.Artists.Value.Count > 0 Then
-                    txtArtist.Text = tag.Artists.Value(0)
-                End If
-                txtAlbum.Text = tag.Album
-                txtYear.Text = tag.Year
-            Else
-                MsgBox("ID3 Track Not Found",, "ID3 Tag Editor")
-                txtTrack.Clear()
-                txtTitle.Clear()
-                txtArtist.Clear()
-                txtAlbum.Clear()
-                txtYear.Clear()
+            Next
+
+            If mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or
+            mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused Or
+            mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsReady Or
+            mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
+                mainForm.AxWindowsMediaPlayer1.Ctlcontrols.stop()
+                mainForm.Timer1.Enabled = False
             End If
-            file.Dispose()
-        End If
+            file = New Mp3(pathSong, Mp3Permissions.ReadWrite)
+            mainForm.AxWindowsMediaPlayer1.settings.autoStart = False
+            If mainForm.lvPlaylist.SelectedItems.Count = 1 Then
+                Dim tag As Id3Tag = New Id3Tag()
+                If file.HasTags Then
+                    If file.HasTagOfVersion(Id3Version.V1X) Then
+                        tag = file.GetTag(Id3TagFamily.Version1X)
+                    ElseIf file.HasTagOfVersion(Id3Version.V23) Then
+                        tag = file.GetTag(Id3TagFamily.Version2X)
+                    End If
+                    txtTrack.Text = tag.Track
+                    txtTitle.Text = tag.Title
+                    If tag.Artists.Value.Count > 0 Then
+                        txtArtist.Text = tag.Artists.Value(0)
+                    End If
+                    txtAlbum.Text = tag.Album
+                    txtYear.Text = tag.Year
+                Else
+                    MsgBox("ID3 Track Not Found",, "ID3 Tag Editor")
+                    txtTrack.Clear()
+                    txtTitle.Clear()
+                    txtArtist.Clear()
+                    txtAlbum.Clear()
+                    txtYear.Clear()
+                End If
+                file.Dispose()
+            End If
+
+        Catch ex As Exception
+            MsgBox("Silahkan pilih terlebih dahulu lagu yang ingin dilihat ID3-nya",, "Music Tag Editor")
+            Me.Hide()
+        End Try
+
     End Sub
 End Class
