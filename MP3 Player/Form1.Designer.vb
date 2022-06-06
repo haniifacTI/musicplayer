@@ -33,6 +33,8 @@ Partial Class mainForm
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddPlaylistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AddFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LoadPlaylistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SavePlaylistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ClearPlaylistToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -64,6 +66,8 @@ Partial Class mainForm
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.AxWindowsMediaPlayer1 = New AxWMPLib.AxWindowsMediaPlayer()
         Me.ofd = New System.Windows.Forms.OpenFileDialog()
+        Me.sfdPlaylist = New System.Windows.Forms.SaveFileDialog()
+        Me.ofdPlaylist = New System.Windows.Forms.OpenFileDialog()
         Me.MenuStrip1.SuspendLayout()
         Me.cmsLVPlaylist.SuspendLayout()
         CType(Me.tbVolume, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -151,7 +155,7 @@ Partial Class mainForm
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddPlaylistToolStripMenuItem, Me.AddFileToolStripMenuItem, Me.ClearPlaylistToolStripMenuItem, Me.SettingToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddPlaylistToolStripMenuItem, Me.AddFileToolStripMenuItem, Me.LoadPlaylistToolStripMenuItem, Me.SavePlaylistToolStripMenuItem, Me.ClearPlaylistToolStripMenuItem, Me.SettingToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(46, 24)
         Me.FileToolStripMenuItem.Text = "File"
@@ -159,31 +163,43 @@ Partial Class mainForm
         'AddPlaylistToolStripMenuItem
         '
         Me.AddPlaylistToolStripMenuItem.Name = "AddPlaylistToolStripMenuItem"
-        Me.AddPlaylistToolStripMenuItem.Size = New System.Drawing.Size(176, 26)
+        Me.AddPlaylistToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.AddPlaylistToolStripMenuItem.Text = "Add Folder"
         '
         'AddFileToolStripMenuItem
         '
         Me.AddFileToolStripMenuItem.Name = "AddFileToolStripMenuItem"
-        Me.AddFileToolStripMenuItem.Size = New System.Drawing.Size(176, 26)
+        Me.AddFileToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.AddFileToolStripMenuItem.Text = "Add File"
+        '
+        'LoadPlaylistToolStripMenuItem
+        '
+        Me.LoadPlaylistToolStripMenuItem.Name = "LoadPlaylistToolStripMenuItem"
+        Me.LoadPlaylistToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.LoadPlaylistToolStripMenuItem.Text = "Load Playlist"
+        '
+        'SavePlaylistToolStripMenuItem
+        '
+        Me.SavePlaylistToolStripMenuItem.Name = "SavePlaylistToolStripMenuItem"
+        Me.SavePlaylistToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.SavePlaylistToolStripMenuItem.Text = "Save Playlist"
         '
         'ClearPlaylistToolStripMenuItem
         '
         Me.ClearPlaylistToolStripMenuItem.Name = "ClearPlaylistToolStripMenuItem"
-        Me.ClearPlaylistToolStripMenuItem.Size = New System.Drawing.Size(176, 26)
+        Me.ClearPlaylistToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.ClearPlaylistToolStripMenuItem.Text = "Clear Playlist"
         '
         'SettingToolStripMenuItem
         '
         Me.SettingToolStripMenuItem.Name = "SettingToolStripMenuItem"
-        Me.SettingToolStripMenuItem.Size = New System.Drawing.Size(176, 26)
+        Me.SettingToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.SettingToolStripMenuItem.Text = "Settings"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(176, 26)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'ToolsToolStripMenuItem
@@ -196,19 +212,19 @@ Partial Class mainForm
         'LyricsToolStripMenuItem
         '
         Me.LyricsToolStripMenuItem.Name = "LyricsToolStripMenuItem"
-        Me.LyricsToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.LyricsToolStripMenuItem.Size = New System.Drawing.Size(216, 26)
         Me.LyricsToolStripMenuItem.Text = "Lyrics"
         '
         'DownloadMusicToolStripMenuItem1
         '
         Me.DownloadMusicToolStripMenuItem1.Name = "DownloadMusicToolStripMenuItem1"
-        Me.DownloadMusicToolStripMenuItem1.Size = New System.Drawing.Size(224, 26)
+        Me.DownloadMusicToolStripMenuItem1.Size = New System.Drawing.Size(216, 26)
         Me.DownloadMusicToolStripMenuItem1.Text = "Music Downloader"
         '
         'MusicTagEditorToolStripMenuItem
         '
         Me.MusicTagEditorToolStripMenuItem.Name = "MusicTagEditorToolStripMenuItem"
-        Me.MusicTagEditorToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.MusicTagEditorToolStripMenuItem.Size = New System.Drawing.Size(216, 26)
         Me.MusicTagEditorToolStripMenuItem.Text = "Music Tag Editor"
         '
         'HelpToolStripMenuItem
@@ -221,7 +237,7 @@ Partial Class mainForm
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(133, 26)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'lvPlaylist
@@ -393,6 +409,17 @@ Partial Class mainForm
         Me.ofd.Multiselect = True
         Me.ofd.Title = "Add Song"
         '
+        'sfdPlaylist
+        '
+        Me.sfdPlaylist.DefaultExt = "pls"
+        Me.sfdPlaylist.FileName = "Playlist 1"
+        Me.sfdPlaylist.Filter = "pls | *.pls"
+        '
+        'ofdPlaylist
+        '
+        Me.ofdPlaylist.DefaultExt = "pls"
+        Me.ofdPlaylist.Filter = "pls | *.pls"
+        '
         'mainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -473,4 +500,8 @@ Partial Class mainForm
     Friend WithEvents ofd As OpenFileDialog
     Friend WithEvents ClearPlaylistToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LyricsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents sfdPlaylist As SaveFileDialog
+    Friend WithEvents ofdPlaylist As OpenFileDialog
+    Friend WithEvents LoadPlaylistToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SavePlaylistToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -1,6 +1,6 @@
 ﻿Imports Id3
 Public Class frmTagEditor
-    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPlaying Or
         mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused Or
         mainForm.AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsReady Or
@@ -9,8 +9,16 @@ Public Class frmTagEditor
             mainForm.AxWindowsMediaPlayer1.close()
             mainForm.AxWindowsMediaPlayer1.URL = ""
         End If
-        Dim file As Mp3 = New Mp3(mainForm.playlistPath & "\" & mainForm.lvPlaylist.SelectedItems(0).Text & ".mp3",
-        Mp3Permissions.ReadWrite)
+
+        Dim songPath As String
+        For Each song In mainForm.playlistOri
+            If song.Contains(mainForm.lvPlaylist.SelectedItems(0).Text) Then
+                songPath = song
+                Exit For
+            End If
+        Next
+
+        Dim file As Mp3 = New Mp3(songPath, Mp3Permissions.ReadWrite)
         Try
             Dim tag As Id3Tag = New Id3Tag()
             If file.HasTagOfVersion(Id3Version.V1X) Then
@@ -79,6 +87,12 @@ Public Class frmTagEditor
     Private Sub frmTagEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Dim file As Mp3 = New Mp3(mainForm.playlistPath & "\" & mainForm.lvPlaylist.SelectedItems(0).Text & ".mp3",
         '    Mp3Permissions.ReadWrite)
+        txtTrack.ReadOnly = False
+        txtTitle.ReadOnly = False
+        txtArtist.ReadOnly = False
+        txtAlbum.ReadOnly = False
+        txtYear.ReadOnly = False
+
         Dim pathSong As String
         Dim file As Mp3
         Try

@@ -24,7 +24,7 @@ Partial Class frmTagEditor
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTagEditor))
         Me.lblMp3Editor = New System.Windows.Forms.Label()
-        Me.btnEdit = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
         Me.txtYear = New System.Windows.Forms.TextBox()
         Me.txtAlbum = New System.Windows.Forms.TextBox()
         Me.txtArtist = New System.Windows.Forms.TextBox()
@@ -48,15 +48,15 @@ Partial Class frmTagEditor
         Me.lblMp3Editor.TabIndex = 8
         Me.lblMp3Editor.Text = "MP3 ID3 Editor"
         '
-        'btnEdit
+        'btnSave
         '
-        Me.btnEdit.Location = New System.Drawing.Point(293, 263)
-        Me.btnEdit.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnEdit.Name = "btnEdit"
-        Me.btnEdit.Size = New System.Drawing.Size(100, 28)
-        Me.btnEdit.TabIndex = 29
-        Me.btnEdit.Text = "Save"
-        Me.btnEdit.UseVisualStyleBackColor = True
+        Me.btnSave.Location = New System.Drawing.Point(293, 263)
+        Me.btnSave.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(100, 28)
+        Me.btnSave.TabIndex = 29
+        Me.btnSave.Text = "Save"
+        Me.btnSave.UseVisualStyleBackColor = True
         '
         'txtYear
         '
@@ -158,7 +158,7 @@ Partial Class frmTagEditor
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(425, 330)
-        Me.Controls.Add(Me.btnEdit)
+        Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.txtYear)
         Me.Controls.Add(Me.txtAlbum)
         Me.Controls.Add(Me.txtArtist)
@@ -182,7 +182,7 @@ Partial Class frmTagEditor
     End Sub
 
     Friend WithEvents lblMp3Editor As Label
-    Friend WithEvents btnEdit As Button
+    Friend WithEvents btnSave As Button
     Friend WithEvents txtYear As TextBox
     Friend WithEvents txtAlbum As TextBox
     Friend WithEvents txtArtist As TextBox

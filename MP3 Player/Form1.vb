@@ -4,7 +4,7 @@ Imports Id3
 Public Class mainForm
     Dim frmLirik As New frmLirik
     Dim frmTagEditor As New frmTagEditor
-    Public playlistPath As String
+    Public folderPath As String
     Dim startpath As String = Application.StartupPath
     Dim rnd As New Random
 
@@ -15,7 +15,7 @@ Public Class mainForm
     Dim isEnded As Boolean = False
     Dim idxSongBefore As Integer
 
-    Dim filePlaylist As String = startpath & "\playlist.txt"
+    Public filePlaylist As String = startpath & "\playlist.pls"
     Public playlistOri As New List(Of String)
     Dim lstShuffle As New List(Of String)
     Dim queueShuffle As New List(Of String)
@@ -38,9 +38,9 @@ Public Class mainForm
         loadPlaylist()
     End Sub
 
-    Private Sub AddPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddPlaylistToolStripMenuItem.Click
+    Private Sub AddFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddPlaylistToolStripMenuItem.Click
         If FolderBrowserDialog1.ShowDialog = DialogResult.OK Then
-            playlistPath = FolderBrowserDialog1.SelectedPath
+            folderPath = FolderBrowserDialog1.SelectedPath
             playlistOri.Clear()
             queueShuffle.Clear()
             lstShuffle.Clear()
@@ -57,15 +57,30 @@ Public Class mainForm
             btnShuffle.Enabled = True
         End If
     End Sub
+    Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
+        If ofd.ShowDialog = DialogResult.OK Then
+            'For Each song In ofd.FileNames
+            '    Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
+            '    objWriter.WriteLine(song)
+            '    objWriter.Close()
+            'Next
+            'loadPlaylist()
+            Dim countAdd As Integer = 0
+            For Each song In ofd.FileNames
+                playlistOri.Add(song)
+                lstShuffle.Add(song)
+                countAdd += 1
+            Next
+            loadToLv(countAdd)
+        End If
+    End Sub
+
     Private Sub loadPlaylist()
         Dim StreamReader As New StreamReader(filePlaylist)
         Dim LineCount As Integer = File.ReadAllLines(filePlaylist).Length
 
         playlistOri.Clear()
         lstShuffle.Clear()
-        lvPlaylist.Items.Clear()
-        lvPlaylist.View = View.Details
-        lvPlaylist.BeginUpdate()
 
         For i = 0 To LineCount - 1
             Dim song As String = StreamReader.ReadLine()
@@ -75,6 +90,22 @@ Public Class mainForm
             Dim fileName As String = Path.GetFileNameWithoutExtension(song)
             playlistOri.Add(song)
             lstShuffle.Add(song)
+        Next
+
+        loadToLv(playlistOri.Count)
+        StreamReader.Close()
+    End Sub
+
+    Private Sub loadToLv(count As Integer)
+        lvPlaylist.Items.Clear()
+        lvPlaylist.View = View.Details
+        lvPlaylist.BeginUpdate()
+        For i = 0 To count - 1
+            Dim song As String = playlistOri(i)
+            Dim tag As Id3Tag = New Id3Tag
+            Dim lItem As New ListViewItem()
+            Dim file As Mp3 = New Mp3(song, Mp3Permissions.Read)
+            Dim fileName As String = Path.GetFileNameWithoutExtension(song)
 
             If file.HasTags Then
                 If file.HasTagOfVersion(Id3Version.V1X) Then
@@ -94,70 +125,28 @@ Public Class mainForm
         Next
         lvPlaylist.EndUpdate()
         lvPlaylist.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-
-        StreamReader.Close()
     End Sub
 
-    'Private Sub getFiles()
-    '    If System.IO.File.Exists(filePlaylist) = False Then
-    '        MessageBox.Show("File Does Not Exist")
-    '    End If
-    '    lvPlaylist.Items.Clear()
-    '    lvPlaylist.View = View.Details
-    '    lvPlaylist.BeginUpdate()
-
-    '    Dim tag As Id3Tag = New Id3Tag
-    '    Dim hasil As String() = Directory.GetFiles(playlistPath, "*.mp3", SearchOption.TopDirectoryOnly)
-
-    '    For i As Integer = 0 To hasil.Length - 1
-    '        Dim lItem As New ListViewItem()
-    '        Dim file As Mp3 = New Mp3(hasil(i), Mp3Permissions.Read)
-    '        Dim fileName As String = Path.GetFileNameWithoutExtension(hasil(i))
-    '        Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
-    '        objWriter.WriteLine(playlistPath & "\" & fileName & ".mp3")
-    '        objWriter.Close()
-    '        playlistOri.Add(playlistPath & "\" & fileName & ".mp3")
-    '        lstShuffle.Add(playlistPath & "\" & fileName & ".mp3")
-
-    '        If file.HasTags Then
-    '            If file.HasTagOfVersion(Id3Version.V1X) Then
-    '                tag = file.GetTag(Id3TagFamily.Version1X)
-    '            ElseIf file.HasTagOfVersion(Id3Version.V23) Then
-    '                tag = file.GetTag(Id3TagFamily.Version2X)
-    '            End If
-    '        End If
-
-    '        With lItem
-    '            .SubItems(0).Text = fileName
-    '            .SubItems.Add(tag.Artists)
-    '            .SubItems.Add(tag.Album)
-    '        End With
-
-    '        lvPlaylist.Items.Add(lItem)
-    '    Next
-    '    lvPlaylist.EndUpdate()
-    '    lvPlaylist.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-    'End Sub
 
     Private Sub getFiles()
         If System.IO.File.Exists(filePlaylist) = False Then
             MessageBox.Show("File Does Not Exist")
         End If
         lvPlaylist.Items.Clear()
-        lvPlaylist.View = View.Details
-        lvPlaylist.BeginUpdate()
 
         Dim tag As Id3Tag = New Id3Tag
-        Dim hasil As String() = Directory.GetFiles(playlistPath, "*.mp3", SearchOption.TopDirectoryOnly)
+        Dim hasil As String() = Directory.GetFiles(folderPath, "*.mp3", SearchOption.TopDirectoryOnly)
 
         For i As Integer = 0 To hasil.Length - 1
-            Dim lItem As New ListViewItem()
-            Dim fileName As String = Path.GetFileNameWithoutExtension(hasil(i))
-            Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
-            objWriter.WriteLine(playlistPath & "\" & fileName & ".mp3")
-            objWriter.Close()
+            'Dim lItem As New ListViewItem()
+            'Dim fileName As String = Path.GetFileNameWithoutExtension(hasil(i))
+            'Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
+            'objWriter.WriteLine(folderPath & "\" & fileName & ".mp3")
+            'objWriter.Close()
+            playlistOri.Add(hasil(i))
+            lstShuffle.Add(hasil(i))
         Next
-        loadPlaylist()
+        loadToLv(playlistOri.Count)
     End Sub
 
     Private Sub shuffleAlgo()
@@ -169,11 +158,11 @@ Public Class mainForm
             lstShuffle.RemoveAt(shuffleIndex)
         Next
 
-        'Dim hasil As String() = Directory.GetFiles(playlistPath, "*.mp3", SearchOption.TopDirectoryOnly)
+        'Dim hasil As String() = Directory.GetFiles(folderPath, "*.mp3", SearchOption.TopDirectoryOnly)
         For i As Integer = 0 To playlistOri.Count - 1
             Dim file As Mp3 = New Mp3(playlistOri(i), Mp3Permissions.Read)
             Dim fileName As String = Path.GetFileNameWithoutExtension(playlistOri(i))
-            lstShuffle.Add(playlistPath & "\" & fileName & ".mp3")
+            lstShuffle.Add(folderPath & "\" & fileName & ".mp3")
         Next
     End Sub
 
@@ -217,7 +206,7 @@ Public Class mainForm
                         End If
                     Next
                     AxWindowsMediaPlayer1.URL = pathSong
-                    'AxWindowsMediaPlayer1.URL = playlistPath & "\" & lvPlaylist.SelectedItems(0).Text & ".mp3"
+                    'AxWindowsMediaPlayer1.URL = folderPath & "\" & lvPlaylist.SelectedItems(0).Text & ".mp3"
                     lvPlaylist.SelectedItems.Clear()
                 ElseIf isShuffle = True Then
                     ShufflePlay(sender, e)
@@ -383,7 +372,11 @@ Public Class mainForm
             'AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
 
             indexLaguSkrg = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
-            AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
+            Try
+                AxWindowsMediaPlayer1.URL = queueShuffle(indexLaguSkrg - 1)
+            Catch
+                AxWindowsMediaPlayer1.URL = queueShuffle(queueShuffle.Count - 1)
+            End Try
 
             Timer1.Enabled = True
             isStop = False
@@ -424,7 +417,11 @@ Public Class mainForm
             'End While
             'AxWindowsMediaPlayer1.URL = playlistOri(shuffleIndex)
             indexLaguSkrg = queueShuffle.IndexOf(AxWindowsMediaPlayer1.URL)
-            AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
+            Try
+                AxWindowsMediaPlayer1.URL = queueShuffle(indexLaguSkrg + 1)
+            Catch
+                AxWindowsMediaPlayer1.URL = queueShuffle(0)
+            End Try
 
             Timer1.Enabled = True
             isStop = False
@@ -678,17 +675,6 @@ Public Class mainForm
         End If
     End Sub
 
-    Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
-        If ofd.ShowDialog = DialogResult.OK Then
-            For Each song In ofd.FileNames
-                Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
-                objWriter.WriteLine(song)
-                objWriter.Close()
-            Next
-            loadPlaylist()
-        End If
-    End Sub
-
     Private Sub cmsDelete_Click(sender As Object, e As EventArgs) Handles cmsDelete.Click
         For Each song In playlistOri
             If song.Contains(lvPlaylist.SelectedItems(0).Text) Then
@@ -705,8 +691,11 @@ Public Class mainForm
     End Sub
 
     Private Sub ClearPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClearPlaylistToolStripMenuItem.Click
-        System.IO.File.WriteAllText(filePlaylist, "")
-        loadPlaylist()
+        'System.IO.File.WriteAllText(filePlaylist, "")
+        'loadPlaylist()
+        playlistOri.Clear()
+        lstShuffle.Clear()
+        lvPlaylist.Items.Clear()
     End Sub
 
     Private Sub LyricsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LyricsToolStripMenuItem.Click
@@ -720,5 +709,26 @@ Public Class mainForm
         Else
             MessageBox.Show("Please play a song first before opening lyrics", "Error Message")
         End If
+    End Sub
+
+    Private Sub LoadPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadPlaylistToolStripMenuItem.Click
+        If ofdPlaylist.ShowDialog = DialogResult.OK Then
+            filePlaylist = ofdPlaylist.FileName
+            loadPlaylist()
+        End If
+    End Sub
+
+    Private Sub SavePlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SavePlaylistToolStripMenuItem.Click
+        If sfdPlaylist.ShowDialog = DialogResult.OK Then
+            For i As Integer = 0 To playlistOri.Count - 1
+                Dim objWriter As New System.IO.StreamWriter(sfdPlaylist.FileName, True)
+                objWriter.WriteLine(playlistOri(i))
+                objWriter.Close()
+            Next
+        End If
+    End Sub
+
+    Private Sub NewPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs)
+
     End Sub
 End Class
