@@ -634,7 +634,7 @@ Public Class mainForm
         NotifyIcon1.Visible = False
     End Sub
 
-    Private Sub MusicTagEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MusicTagEditorToolStripMenuItem.Click
+    Private Sub MusicTagEditorToolStripMenuItem_Click(sender As Object, e As EventArgs)
         frmTagEditor.ShowDialog()
     End Sub
 
@@ -648,7 +648,8 @@ Public Class mainForm
                 End If
             Next
             AxWindowsMediaPlayer1.URL = pathSong
-            AxWindowsMediaPlayer1.Ctlcontrols.play()
+            'AxWindowsMediaPlayer1.Ctlcontrols.play()
+            btnPlay.PerformClick()
             lvPlaylist.SelectedItems.Clear()
 
             tampilJudul() 'tampilin judul

@@ -41,7 +41,6 @@ Partial Class mainForm
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LyricsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DownloadMusicToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MusicTagEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.lvPlaylist = New System.Windows.Forms.ListView()
@@ -204,7 +203,7 @@ Partial Class mainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LyricsToolStripMenuItem, Me.DownloadMusicToolStripMenuItem1, Me.MusicTagEditorToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LyricsToolStripMenuItem, Me.DownloadMusicToolStripMenuItem1})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(58, 24)
         Me.ToolsToolStripMenuItem.Text = "Tools"
@@ -212,20 +211,14 @@ Partial Class mainForm
         'LyricsToolStripMenuItem
         '
         Me.LyricsToolStripMenuItem.Name = "LyricsToolStripMenuItem"
-        Me.LyricsToolStripMenuItem.Size = New System.Drawing.Size(216, 26)
+        Me.LyricsToolStripMenuItem.Size = New System.Drawing.Size(224, 26)
         Me.LyricsToolStripMenuItem.Text = "Lyrics"
         '
         'DownloadMusicToolStripMenuItem1
         '
         Me.DownloadMusicToolStripMenuItem1.Name = "DownloadMusicToolStripMenuItem1"
-        Me.DownloadMusicToolStripMenuItem1.Size = New System.Drawing.Size(216, 26)
+        Me.DownloadMusicToolStripMenuItem1.Size = New System.Drawing.Size(224, 26)
         Me.DownloadMusicToolStripMenuItem1.Text = "Music Downloader"
-        '
-        'MusicTagEditorToolStripMenuItem
-        '
-        Me.MusicTagEditorToolStripMenuItem.Name = "MusicTagEditorToolStripMenuItem"
-        Me.MusicTagEditorToolStripMenuItem.Size = New System.Drawing.Size(216, 26)
-        Me.MusicTagEditorToolStripMenuItem.Text = "Music Tag Editor"
         '
         'HelpToolStripMenuItem
         '
@@ -492,7 +485,6 @@ Partial Class mainForm
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SettingToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents MusicTagEditorToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents cmsLVPlaylist As ContextMenuStrip
     Friend WithEvents cmsDelete As ToolStripMenuItem
     Friend WithEvents NotifyIcon1 As NotifyIcon

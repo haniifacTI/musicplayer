@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text.RegularExpressions
+Imports System.Security.Cryptography
 
 Public Class frmLirik
     Dim startpath As String = Application.StartupPath
@@ -39,7 +40,7 @@ Public Class frmLirik
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
-        Me.Hide()
+        Me.Dispose()
     End Sub
 
     Private Sub btnEdit_Click(sender As Object, e As EventArgs) 
@@ -54,10 +55,18 @@ Public Class frmLirik
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If rtbLirik.Text IsNot Nothing Then
             Dim cleanLyrics As String = removeIdentifierOnLyrics(rtbLirik.Text) 'Regex buat ngilangin tanda [ dan ]
+
+            'untuk hash
+            Dim hashbyte As Byte() = hashing(mainForm.AxWindowsMediaPlayer1.URL)
+            Dim hashString As String = ByteArrayToString(hashbyte)
+
             If isLyricFound = False Then
                 Dim fileWrite As System.IO.StreamWriter
                 fileWrite = My.Computer.FileSystem.OpenTextFileWriter(startpath & "\Lyrics.txt", True)
-                fileWrite.WriteLine("[" & Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL) & "]")
+
+                'fileWrite.WriteLine("[" & Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL) & "]")
+                fileWrite.WriteLine("[" & hashString & "]")
+
                 fileWrite.WriteLine(cleanLyrics & vbCrLf)
                 fileWrite.Close()
                 rtbLirik.Text = cleanLyrics
@@ -67,6 +76,7 @@ Public Class frmLirik
             Else
                 EditLyrics()
             End If
+
         Else
             MsgBox("Paste your lyrics first before saving it.")
         End If
@@ -83,19 +93,25 @@ Public Class frmLirik
         Dim endLyric As Boolean = False
         Dim founded As Boolean = False
 
-        If fileRead.Contains(Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL)) Then
+        'untuk hash
+        Dim hashbyte As Byte() = hashing(mainForm.AxWindowsMediaPlayer1.URL)
+        Dim hashString As String = ByteArrayToString(hashbyte)
+
+        If fileRead.Contains(hashString) Then
             While reader.Peek <> -1
                 line = reader.ReadLine
 
                 If founded = False And Not line.Contains("[") Then
                     Continue While
-                ElseIf line.Contains($"[{Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL)}]") Or founded = True Then
+                ElseIf line.Contains($"[{hashString}]") Or founded = True Then
                     founded = True
                     isLyricFound = True
+                    Me.Text = Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL)
 
                     If Not line.Contains("[") Then
                         lyrics = lyrics & line & vbCrLf
-                    ElseIf line.Contains("[") And Not line.Contains($"[{Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL)}]") Then
+                        'ElseIf line.Contains("[") And Not line.Contains($"[{Path.GetFileNameWithoutExtension(mainForm.AxWindowsMediaPlayer1.URL)}]") Then
+                    ElseIf line.Contains("[") And Not line.Contains($"[{hashString}]") Then
                         endLyric = True
                         founded = False
                         Exit While
@@ -116,4 +132,19 @@ Public Class frmLirik
         rtbLirik.Text = Nothing
         LoadExistingLyrics()
     End Sub
+    Private Function hashing(ByVal path As String) As Byte()
+        Using sha256hash = SHA256.Create
+            Using stream = File.OpenRead(path)
+                Return sha256hash.ComputeHash(stream)
+            End Using
+        End Using
+    End Function
+
+    Private Function ByteArrayToString(ByVal arrInput() As Byte) As String
+        Dim sb As New System.Text.StringBuilder(arrInput.Length * 2)
+        For i As Integer = 0 To arrInput.Length - 1
+            sb.Append(arrInput(i).ToString("X2")) 'X2 means Hexadecimal format
+        Next
+        Return sb.ToString().ToLower
+    End Function
 End Class
