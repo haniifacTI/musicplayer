@@ -366,3 +366,58 @@ D:\1. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Deb
 D:\1. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\Interop.WMPLib.dll
 D:\1. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\bin\Debug\AxInterop.WMPLib.dll
 D:\1. Kuliah\Semester 4\8. ProgDesk\Proyek Github\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.CopyComplete
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\MP3 Player.exe.config
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\MP3 Player.exe
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\MP3 Player.pdb
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\MP3 Player.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\AngleSharp.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\CliWrap.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\cs-ffmpeg-mp3-converter.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\Id3.Net.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\JetBrains.Annotations.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Buffers.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Memory.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Text.Encoding.CodePages.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Text.Encodings.Web.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Text.Json.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.ValueTuple.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.Converter.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\AngleSharp.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\CliWrap.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\Id3.Net.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\JetBrains.Annotations.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Buffers.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Memory.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Text.Encoding.CodePages.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Text.Encodings.Web.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Text.Json.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\System.ValueTuple.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\YoutubeExplode.Converter.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\Interop.WMPLib.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.AssemblyReference.cache
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.SuggestedBindingRedirects.cache
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\Interop.WMPLib.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.ResolveComReference.cache
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3_Player.mainForm.resources
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3_Player.frmDownload.resources
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3_Player.frmLirik.resources
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3_Player.frmTagEditor.resources
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3_Player.Resources.resources
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.GenerateResource.cache
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.CoreCompileInputs.cache
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.vbproj.CopyComplete
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.exe
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.xml
+C:\Users\Haniif\source\repos\1-GIT REPOS\musicplayer\MP3 Player\obj\Debug\MP3 Player.pdb

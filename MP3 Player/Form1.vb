@@ -15,7 +15,7 @@ Public Class mainForm
     Dim isEnded As Boolean = False
     Dim idxSongBefore As Integer
 
-    Public filePlaylist As String = startpath & "\playlist.pls"
+    Public filePlaylist As String
     Public playlistOri As New List(Of String)
     Dim lstShuffle As New List(Of String)
     Dim queueShuffle As New List(Of String)
@@ -24,18 +24,27 @@ Public Class mainForm
         tbVolume.Value = 30
         lblEndDuration.Text = "00:00"
         lblStartDuration.Text = "00:00"
-        'btnStop.Enabled = False
-        'btnNext.Enabled = False
-        'btnPrev.Enabled = False
-        'TrackBar1.Enabled = False
-        'tbVolume.Enabled = False
-        'btnRepeatPlaylist.Enabled = False
-        'btnRepeatSong.Enabled = False
-        'btnShuffle.Enabled = False
-        'btnLirik.Enabled = False
+        disableAllButton()
+    End Sub
 
-        'Load playlist
-        loadPlaylist()
+    Private Sub enableAllButton()
+        btnStop.Enabled = True
+        btnNext.Enabled = True
+        btnPrev.Enabled = True
+        TrackBar1.Enabled = True
+        btnRepeatPlaylist.Enabled = True
+        btnRepeatSong.Enabled = True
+        btnShuffle.Enabled = True
+    End Sub
+
+    Private Sub disableAllButton()
+        btnStop.Enabled = False
+        btnNext.Enabled = False
+        btnPrev.Enabled = False
+        TrackBar1.Enabled = False
+        btnRepeatPlaylist.Enabled = False
+        btnRepeatSong.Enabled = False
+        btnShuffle.Enabled = False
     End Sub
 
     Private Sub AddFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddPlaylistToolStripMenuItem.Click
@@ -46,32 +55,7 @@ Public Class mainForm
             lstShuffle.Clear()
             getFiles()
 
-            btnStop.Enabled = True
-            btnNext.Enabled = True
-            btnPrev.Enabled = True
-            TrackBar1.Enabled = True
-            tbVolume.Enabled = True
-            'btnLirik.Enabled = True
-            btnRepeatPlaylist.Enabled = True
-            btnRepeatSong.Enabled = True
-            btnShuffle.Enabled = True
-        End If
-    End Sub
-    Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
-        If ofd.ShowDialog = DialogResult.OK Then
-            'For Each song In ofd.FileNames
-            '    Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
-            '    objWriter.WriteLine(song)
-            '    objWriter.Close()
-            'Next
-            'loadPlaylist()
-            Dim countAdd As Integer = 0
-            For Each song In ofd.FileNames
-                playlistOri.Add(song)
-                lstShuffle.Add(song)
-                countAdd += 1
-            Next
-            loadToLv(countAdd)
+            enableAllButton()
         End If
     End Sub
 
@@ -162,7 +146,9 @@ Public Class mainForm
         For i As Integer = 0 To playlistOri.Count - 1
             Dim file As Mp3 = New Mp3(playlistOri(i), Mp3Permissions.Read)
             Dim fileName As String = Path.GetFileNameWithoutExtension(playlistOri(i))
-            lstShuffle.Add(folderPath & "\" & fileName & ".mp3")
+            'lstShuffle.Add(folderPath & "\" & fileName & ".mp3")
+            lstShuffle.Add(playlistOri(i))
+
         Next
     End Sub
 
@@ -190,8 +176,7 @@ Public Class mainForm
 
     Private Sub btnPlay_Click(sender As Object, e As EventArgs) Handles btnPlay.Click
         'Menandakan play
-        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And
-            isStop = True And isEnded = False Then
+        If btnPlay.Text = "play" And Not AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsPaused And isStop = True And isEnded = False Then
             If playlistOri.Count <> 0 Then
                 btnPlay.Image = Image.FromFile("Images/pause.png")
                 btnPlay.Text = "pause"
@@ -219,10 +204,10 @@ Public Class mainForm
                 isStop = False
                 isEnded = False
             Else
-                MsgBox("Please add the playlist first.",, "Play")
+                MsgBox("Please add the song first.",, "Play")
             End If
 
-        ElseIf isEnded Then ' kalau playlist end tapi orgnya mau ngeplay
+        ElseIf isEnded And playlistOri.Count <> 0 Then ' kalau playlist end tapi orgnya mau 
             If isShuffle = True Then
                 AxWindowsMediaPlayer1.URL = queueShuffle(0)
             Else
@@ -306,13 +291,24 @@ Public Class mainForm
             isEnded = True
             MsgBox("Shuffle Created")
             'outqShuffle()
+
+            isRepeatSong = False
+            btnRepeatSong.Enabled = False
         Else
             If isShuffle = True Then
                 isShuffle = False
                 btnShuffle.FlatStyle = FlatStyle.Flat
+
+                btnRepeatSong.Enabled = True
+                btnRepeatSong.FlatStyle = FlatStyle.Flat
             ElseIf isShuffle = False Then
                 isShuffle = True
                 btnShuffle.FlatStyle = FlatStyle.Standard
+                shuffleAlgo()
+
+                isRepeatSong = False
+                btnRepeatSong.Enabled = False
+                btnRepeatSong.FlatStyle = FlatStyle.Standard
             End If
         End If
     End Sub
@@ -330,25 +326,13 @@ Public Class mainForm
         ' biar stop judulnya ditengah
         lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
         lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+
     End Sub
-
-    'Private Sub btnLirik_Click(sender As Object, e As EventArgs) Handles btnLirik.Click
-    '    If AxWindowsMediaPlayer1.currentMedia IsNot Nothing Then
-    '        Try
-    '            frmLirik.Show()
-    '        Catch exDispose As System.ObjectDisposedException
-    '            frmLirik = New frmLirik
-    '            frmLirik.Show()
-    '        End Try
-    '    Else
-    '        MessageBox.Show("Please play a song first before opening lyrics", "Error Message")
-    '    End If
-    'End Sub
-
     Private Sub btnPrev_Click(sender As Object, e As EventArgs) Handles btnPrev.Click
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
-
-        If isShuffle = False Then
+        If playlistOri.Count = 0 Then
+            MsgBox("Please add the song first.",, "Previous")
+        ElseIf isShuffle = False Then
             Try
                 AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg - 1)
             Catch
@@ -375,6 +359,7 @@ Public Class mainForm
             Try
                 AxWindowsMediaPlayer1.URL = queueShuffle(indexLaguSkrg - 1)
             Catch
+                shuffleAlgo()
                 AxWindowsMediaPlayer1.URL = queueShuffle(queueShuffle.Count - 1)
             End Try
 
@@ -394,8 +379,9 @@ Public Class mainForm
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         Dim indexLaguSkrg As Integer = playlistOri.IndexOf(AxWindowsMediaPlayer1.URL)
-
-        If isShuffle = False Then
+        If playlistOri.Count = 0 Then
+            MsgBox("Please add the song first.",, "Next")
+        ElseIf isShuffle = False Then
             Try
                 AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg + 1)
             Catch
@@ -420,6 +406,7 @@ Public Class mainForm
             Try
                 AxWindowsMediaPlayer1.URL = queueShuffle(indexLaguSkrg + 1)
             Catch
+                shuffleAlgo()
                 AxWindowsMediaPlayer1.URL = queueShuffle(0)
             End Try
 
@@ -445,7 +432,21 @@ Public Class mainForm
             lblJudul.Left = lblJudul.Left + 10
         End If
     End Sub
+    Sub outqShuffle()
+        Dim out As String = ""
+        For i = 0 To queueShuffle.Count() - 1
+            out += queueShuffle(i) & vbCrLf
+        Next
+        MessageBox.Show(out)
+    End Sub
 
+    Sub outqOri()
+        Dim out As String = ""
+        For i = 0 To playlistOri.Count() - 1
+            out += playlistOri(i) & vbCrLf
+        Next
+        MessageBox.Show(out)
+    End Sub
     Private Sub NormalPlaySong(sender As Object, e As EventArgs, indexLaguSkrg As Integer) 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
         If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
         AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
@@ -471,7 +472,10 @@ Public Class mainForm
             End If
         End If
     End Sub
-
+    Private Sub RepeatPlaySong(indexLaguSkrg As Integer)
+        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg)
+        tampilJudul()
+    End Sub
     Private Sub RepeatPlaylistPlay(indexLaguSkrg As Integer) 'kalau lagu abis lgsg next song. kalau udah ga ada lagu lagi stop playing.
         If AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsUndefined Or
         AxWindowsMediaPlayer1.playState = WMPLib.WMPPlayState.wmppsStopped Then
@@ -485,27 +489,6 @@ Public Class mainForm
                 End Try
             End If
         End If
-    End Sub
-
-    Sub outqShuffle()
-        Dim out As String = ""
-        For i = 0 To queueShuffle.Count() - 1
-            out += queueShuffle(i) & vbCrLf
-        Next
-        MessageBox.Show(out)
-    End Sub
-
-    Sub outqOri()
-        Dim out As String = ""
-        For i = 0 To playlistOri.Count() - 1
-            out += playlistOri(i) & vbCrLf
-        Next
-        MessageBox.Show(out)
-    End Sub
-
-    Private Sub RepeatPlaySong(indexLaguSkrg As Integer)
-        AxWindowsMediaPlayer1.URL = playlistOri(indexLaguSkrg)
-        tampilJudul()
     End Sub
     Private Sub ShufflePlay(sender As Object, e As EventArgs)
         If queueShuffle.Count = 0 Then
@@ -676,14 +659,23 @@ Public Class mainForm
     End Sub
 
     Private Sub cmsDelete_Click(sender As Object, e As EventArgs) Handles cmsDelete.Click
-        For Each song In playlistOri
-            If song.Contains(lvPlaylist.SelectedItems(0).Text) Then
-                playlistOri.Remove(song)
-                Exit For
-            End If
-        Next
-        IO.File.WriteAllLines(filePlaylist, playlistOri)
-        loadPlaylist()
+        Try
+            For Each song In playlistOri
+                If song.Contains(lvPlaylist.SelectedItems(0).Text) Then
+                    playlistOri.Remove(song)
+                    lvPlaylist.SelectedItems.Clear()
+                    Exit For
+                End If
+            Next
+        Catch
+        End Try
+        'IO.File.WriteAllLines(filePlaylist, playlistOri)
+        'loadPlaylist()
+        loadToLv(playlistOri.Count)
+
+        If playlistOri.Count = 0 Then
+            ClearPlaylistToolStripMenuItem.PerformClick()
+        End If
     End Sub
 
     Private Sub SettingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SettingToolStripMenuItem.Click
@@ -696,6 +688,24 @@ Public Class mainForm
         playlistOri.Clear()
         lstShuffle.Clear()
         lvPlaylist.Items.Clear()
+
+        isShuffle = False
+        isRepeatSong = False
+        isRepeatPlaylist = False
+        isStop = True
+        isEnded = False
+
+        btnRepeatPlaylist.FlatStyle = FlatStyle.Flat
+        btnRepeatPlaylist.FlatAppearance.BorderSize = 0
+        btnRepeatSong.FlatStyle = FlatStyle.Flat
+        btnShuffle.FlatStyle = FlatStyle.Flat
+
+        lblJudul.Text = "Judul"
+        lblArtis.Text = "Artist"
+        lblJudul.Left = (Me.Width / 2.2) - (lblJudul.Width / 2)
+        lblArtis.Left = (Me.Width / 2.2) - (lblArtis.Width / 2)
+        btnStop.PerformClick()
+        disableAllButton()
     End Sub
 
     Private Sub LyricsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LyricsToolStripMenuItem.Click
@@ -714,6 +724,7 @@ Public Class mainForm
     Private Sub LoadPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoadPlaylistToolStripMenuItem.Click
         If ofdPlaylist.ShowDialog = DialogResult.OK Then
             filePlaylist = ofdPlaylist.FileName
+            enableAllButton()
             loadPlaylist()
         End If
     End Sub
@@ -727,8 +738,24 @@ Public Class mainForm
             Next
         End If
     End Sub
+    Private Sub AddFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AddFileToolStripMenuItem.Click
+        If ofd.ShowDialog = DialogResult.OK Then
+            'For Each song In ofd.FileNames
+            '    Dim objWriter As New System.IO.StreamWriter(filePlaylist, True)
+            '    objWriter.WriteLine(song)
+            '    objWriter.Close()
+            'Next
+            'loadPlaylist()
+            Dim countAdd As Integer = 0
+            For Each song In ofd.FileNames
+                playlistOri.Add(song)
+                lstShuffle.Add(song)
+                countAdd += 1
+            Next
+            'loadToLv(countAdd)
+            loadToLv(playlistOri.Count)
 
-    Private Sub NewPlaylistToolStripMenuItem_Click(sender As Object, e As EventArgs)
-
+            enableAllButton()
+        End If
     End Sub
 End Class
