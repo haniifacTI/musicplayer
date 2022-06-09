@@ -70,10 +70,20 @@ Public Class mainForm
             Dim song As String = StreamReader.ReadLine()
             Dim tag As Id3Tag = New Id3Tag
             Dim lItem As New ListViewItem()
-            Dim file As Mp3 = New Mp3(song, Mp3Permissions.Read)
-            Dim fileName As String = Path.GetFileNameWithoutExtension(song)
-            playlistOri.Add(song)
-            lstShuffle.Add(song)
+            Dim file As Mp3
+            Dim fileName As String
+
+            If Not System.IO.File.Exists(song) Then
+                Continue For
+            Else
+                file = New Mp3(song, Mp3Permissions.Read)
+                fileName = Path.GetFileNameWithoutExtension(song)
+
+                playlistOri.Add(song)
+                lstShuffle.Add(song)
+            End If
+
+
         Next
 
         loadToLv(playlistOri.Count)
